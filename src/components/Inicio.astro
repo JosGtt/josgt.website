@@ -1,0 +1,153 @@
+---
+// src/pages/index.astro
+import DevIllustration from './DevIllustration.astro';
+---
+<section
+  id="inicio"
+  class="relative py-20"   <!-- <-- NO overflow-hidden -->
+>
+  <div class="container mx-auto px-4 relative">
+    <!-- LEFT SYMBOL -->
+    <div class="absolute z-0 pointer-events-none symbol-wrap-left" aria-hidden="true">
+      <!-- preserveAspectRatio y viewBox más amplio -->
+      <svg class="symbol-svg" viewBox="0 0 300 300" preserveAspectRatio="xMidYMid meet"
+           xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+        <text x="50%" y="50%" text-anchor="middle"
+              font-family="ui-monospace, Menlo, Monaco, 'Roboto Mono', monospace"
+              font-weight="700" fill="currentColor">
+          &lt;&gt;
+        </text>
+      </svg>
+    </div>
+
+    <!-- Contenido central -->
+    <div class="flex flex-col md:flex-row items-center justify-center gap-8">
+      <div class="w-full md:w-1/2 flex flex-col items-center z-10">
+        <div class="hidden md:block mb-4">
+          <DevIllustration iconClass="w-40 h-40 md:w-56 md:h-56 fill-current text-[var(--toggle-sun)]" />
+        </div>
+
+        <h1 id="hero-title"
+            class="text-6xl md:text-8xl font-extrabold leading-tight text-center text-glow whitespace-pre-line"
+            style="font-family: var(--font-display); color: var(--text-light);">
+        </h1>
+
+        <p class="mt-4 text-lg md:text-xl text-[var(--text-light)] dark:text-gray-400 text-center max-w-md">
+          Desarrollador · Disponibilidad inmediata · React · Astro · Tailwind
+        </p>
+      </div>
+    </div>
+
+    <!-- RIGHT SYMBOL -->
+    <div class="absolute z-0 pointer-events-none symbol-wrap-right" aria-hidden="true">
+      <svg class="symbol-svg" viewBox="0 0 300 300" preserveAspectRatio="xMidYMid meet"
+           xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+        <text x="50%" y="50%" text-anchor="middle"
+              font-family="ui-monospace, Menlo, Monaco, 'Roboto Mono', monospace"
+              font-weight="700" fill="currentColor">
+          &lt;/&gt;
+        </text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- typing + IO (sin cambios funcionales) -->
+  <script type="module" client:load>
+    const text = "Front End\nDeveloper";
+    const titleEl = document.getElementById('hero-title');
+
+    function buildTyped(el, txt) {
+      el.innerHTML = '';
+      const lines = txt.split('\n');
+      lines.forEach((line, li) => {
+        const lineWrap = document.createElement('div');
+        lineWrap.className = 'line';
+        Array.from(line).forEach((ch, i) => {
+          const span = document.createElement('span');
+          span.className = 'hero-char';
+          span.textContent = ch === ' ' ? '\u00A0' : ch;
+          span.style.setProperty('--d', `${(li * 0.4) + i * 0.06}s`);
+          lineWrap.appendChild(span);
+        });
+        if (li === lines.length - 1) {
+          const cursor = document.createElement('span');
+          cursor.className = 'hero-cursor';
+          cursor.textContent = '▌';
+          lineWrap.appendChild(cursor);
+        }
+        el.appendChild(lineWrap);
+      });
+    }
+
+    const io = new IntersectionObserver((entries, obs) => {
+      for (const e of entries) {
+        if (e.isIntersecting) {
+          buildTyped(titleEl, text);
+          titleEl.classList.add('typing-started');
+          obs.disconnect();
+        }
+      }
+    }, { threshold: 0.2 });
+    io.observe(titleEl);
+  </script>
+
+  <style is:global>
+    /* variables: tamaño grande pero seguro para móviles */
+    :root{
+      --edge-offset: 1rem; /* distancia horizontal desde container (coincide px-4) */
+      /* size control: clamp(min, preferred, max) para que no rebase en móviles */
+      --symbol-size: clamp(56px, 12vw, 180px);          /* tamaño físico del SVG */
+      --symbol-font-size: clamp(72px, 20vw, 220px);     /* font-size del <text> dentro del SVG */
+      --symbol-vertical: 3.5rem;                        /* mantiene la altura */
+    }
+
+    /* wrapper posicionamiento: mismos left/right y mismo top (simetría) */
+    .symbol-wrap-left {
+      left: var(--edge-offset);
+      top: var(--symbol-vertical);
+      transform: translateY(-50%);
+    }
+    .symbol-wrap-right {
+      right: var(--edge-offset);
+      top: var(--symbol-vertical);
+      transform: translateY(-50%);
+    }
+
+    /* SVG: permitir overflow (que no corte), tamaño y font-size controlados por CSS */
+    .symbol-svg {
+      width: var(--symbol-size);
+      height: var(--symbol-size);
+      font-size: var(--symbol-font-size); /* afecta al <text> */
+      color: var(--toggle-sun);
+      overflow: visible; /* importantísimo para que no se corte el glyph */
+      display: block;
+      filter: drop-shadow(0 6px 16px rgba(0,0,0,0.25));
+      transform-origin: center;
+    }
+    html.dark .symbol-svg { color: var(--toggle-moon); }
+
+    /* forzar que el <text> se alinee correctamente (compatibilidad) */
+    .symbol-svg text {
+      dominant-baseline: middle;
+      alignment-baseline: central;
+    }
+
+    /* animación sutil opcional */
+    @keyframes float-subtle { 0%{ transform: translateY(0); } 50%{ transform: translateY(-3px); } 100%{ transform: translateY(0); } }
+    .symbol-svg { animation: float-subtle 6s ease-in-out infinite; }
+
+    /* typing styles (igual que antes) */
+    #hero-title .line { display:inline-block; white-space:pre; }
+    #hero-title .hero-char { display:inline-block; opacity: 0; transform: translateY(8px); animation: hero-type 0.12s ease-out forwards; animation-delay: var(--d); font-variant-ligatures: none; }
+    #hero-title .hero-cursor { display:inline-block; margin-left:6px; opacity: 0; font-weight: 700; }
+    #hero-title.typing-started .hero-cursor { opacity:1; animation: blink 1s steps(2,end) infinite; }
+    @keyframes hero-type { from{ opacity:0; transform: translateY(8px);} to{ opacity:1; transform: translateY(0);} }
+    @keyframes blink { 0%,100%{ opacity:1; } 50%{ opacity:0; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      .symbol-svg { animation: none !important; }
+      .hero-char { animation: none !important; opacity: 1 !important; transform: none !important; }
+      .hero-cursor { display: none !important; }
+    }
+  </style>
+</section>

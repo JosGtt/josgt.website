@@ -1,0 +1,85 @@
+---
+// src/components/Habilidades.astro
+import ReactIcon     from "../components/icons/REACT.astro";
+import AstroIcon     from "../components/icons/ASTRO.astro";
+import TailwindIcon  from "../components/icons/TAILWIND.astro";
+import JavaScriptIcon from "../components/icons/JS.astro";
+import HTMLIcon      from "../components/icons/HTML.astro";
+import CSSIcon       from "../components/icons/CSS.astro";
+import PythonIcon    from "../components/icons/PYTHON.astro";
+import CSharpIcon    from "../components/icons/Csharp.astro";
+import SQLIcon       from "../components/icons/SQL.astro";
+import NodeIcon      from "../components/icons/NODE.astro";
+import GitIcon       from "../components/icons/GIT.astro";
+import GitHubIcon    from "../components/icons/GITHUB.astro";
+import RubyIcon      from "../components/icons/RUBY.astro";
+import LARAVELIcon   from "../components/icons/LARAVEL.astro";
+import PHPIcon       from "../components/icons/PHP.astro";
+import NETIcon       from "../components/icons/NET.astro";
+---
+<section id="habilidades" class="py-16 px-4 md:px-50">
+  <h2 class="text-3xl font-bold text-center text-glow mb-9">Habilidades &amp; Aprendizaje</h2>
+
+  <!-- Contenedor centrado con ancho máximo para evitar que las tarjetas se estiren -->
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:justify-center md:items-start gap-6">
+
+    <!-- Habilidades (tarjeta - ancho fijo para no estirarse) -->
+    <div class="flex-none w-[720px] max-w-full border-2 rounded-xl p-4 box-border">
+      <h3 class="text-2xl font-semibold mb-4 text-center">Habilidades</h3>
+
+      <div class="w-full grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 justify-items-center">
+        {[
+          { Icon: ReactIcon,   cls: 'tech-react',    label: 'React' },
+          { Icon: AstroIcon,   cls: 'tech-astro',    label: 'Astro' },
+          { Icon: TailwindIcon,cls: 'tech-tailwind', label: 'Tailwind' },
+          { Icon: JavaScriptIcon, cls: 'tech-js',     label: 'JavaScript' },
+          { Icon: HTMLIcon,    cls: 'tech-html',     label: 'HTML' },
+          { Icon: CSSIcon,     cls: 'tech-css',      label: 'CSS' },
+          { Icon: PythonIcon,  cls: 'tech-python',   label: 'Python' },
+          { Icon: CSharpIcon,  cls: 'tech-csharp',   label: 'C#' },
+          { Icon: SQLIcon,     cls: 'tech-sql',      label: 'SQL' },
+          { Icon: NodeIcon,    cls: 'tech-node',     label: 'Node' },
+          { Icon: GitHubIcon,  cls: 'tech-github',   label: 'GitHub' },
+          { Icon: PHPIcon,     cls: 'tech-php',      label: 'PHP' }
+        ].map(({ Icon, cls, label }, i) => (
+          <div
+            key={i}
+            class={`tech-pill ${cls} box-border flex flex-col items-center justify-start rounded-lg border-4 border-[var(--card-border)] p-4 w-[160px] h-[140px] transition-transform duration-150 hover:-translate-y-1`}
+            title={label}
+            aria-label={label}
+          >
+            <!-- ICON: tamaño controlado aquí -->
+            <Icon class="tech-icon fill-current w-[56px] h-[56px] md:w-[64px] md:h-[64px]" />
+            <!-- etiqueta debajo del icono -->
+            <div class="tech-label mt-3 text-sm font-semibold text-center sr-only md:not-sr-only">{label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- En aprendizaje (misma anchura / comportamiento) -->
+    <div class="flex-none w-[720px] max-w-full border-2 rounded-xl p-4 box-border">
+      <h3 class="text-2xl font-semibold mb-4 text-center">En Aprendizaje</h3>
+
+      <div class="w-full grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 justify-items-center">
+        {[
+          { Icon: LARAVELIcon, cls: 'tech-laravel', label: 'Laravel' },
+          { Icon: NETIcon,     cls: 'tech-net',     label: '.NET' },
+          { Icon: RubyIcon,    cls: 'tech-ruby',    label: 'Ruby' },
+          { Icon: GitIcon,     cls: 'tech-git',     label: 'Git' }
+        ].map(({ Icon, cls, label }, i) => (
+          <div
+            key={i}
+            class={`tech-pill ${cls} box-border flex flex-col items-center justify-start rounded-lg border-4 border-[var(--card-border)] p-4 w-[160px] h-[140px] transition-transform duration-150 hover:-translate-y-1`}
+            title={label}
+            aria-label={label}
+          >
+            <Icon class="tech-icon fill-current w-[56px] h-[56px] md:w-[64px] md:h-[64px]" />
+            <div class="tech-label mt-3 text-sm font-semibold text-center sr-only md:not-sr-only">{label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+  </div>
+</section>

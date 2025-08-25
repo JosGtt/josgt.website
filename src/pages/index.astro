@@ -1,0 +1,100 @@
+---
+import Menu        from '../components/Menu.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
+import LangToggle  from '../components/LangToggle.astro';
+import Inicio      from '../components/Inicio.astro';
+import Trabajos    from '../components/Trabajos.astro';
+import Habilidades from '../components/Habilidades.astro';
+import Proyectos   from '../components/Proyectos.astro';
+import Contacto    from '../components/Contacto.astro';
+import SobreMi     from '../components/SobreMi.astro';
+import '../styles/global.css';
+---
+
+<html class="transition-colors bg-white text-black dark:bg-black dark:text-white">
+  <head>
+    <meta charset="utf-8" />
+    <title>Mi Portafolio</title>
+
+    <style global>
+      /* siempre mostrar el cursor real */
+      body {
+        cursor: auto !important;
+      }
+
+      /* variables de posición y color para el halo */
+ :root {
+  --h-x: 0px;
+  --h-y: 0px;
+  --h-size: 100px;
+
+  /* Colores más visibles */
+  --h-color-light: rgba(120, 0, 255, 0.35); /* más fuerte sobre blanco */
+  --h-color-dark: rgba(0, 200, 255, 0.4);   /* más vivo en oscuro */
+}
+
+html.dark {
+  --h-color: var(--h-color-dark);
+}
+
+html:not(.dark) {
+  --h-color: var(--h-color-light);
+}
+
+#custom-halo {
+  position: fixed;
+  left: var(--h-x);
+  top: var(--h-y);
+  width: var(--h-size);
+  height: var(--h-size);
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, var(--h-color) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  mix-blend-mode: screen;         /* ✅ más visibilidad en blanco y oscuro */
+  transition: width 0.2s ease, height 0.2s ease;
+  z-index: 9999;
+}  </style>
+  </head>
+
+  <body class="min-h-screen p-4">
+    <!-- Halo flotante -->
+    <div id="custom-halo"></div>
+
+    <!-- Script para seguir el cursor y expandirse al pasar sobre enlaces -->
+    <script is:client>
+      document.addEventListener('mousemove', (e) => {
+        document.documentElement.style.setProperty('--h-x', e.clientX + 'px');
+        document.documentElement.style.setProperty('--h-y', e.clientY + 'px');
+      });
+
+      document.querySelectorAll('a, button').forEach((el) => {
+        el.addEventListener('mouseenter', () => {
+          document.documentElement.style.setProperty('--h-size', '180px');
+        });
+        el.addEventListener('mouseleave', () => {
+          document.documentElement.style.setProperty('--h-size', '100px');
+        });
+      });
+    </script>
+
+    <!-- Cabecera del sitio -->
+    <header id="site-header" class="sticky top-0 z-50 flex justify-between items-center bg-transparent px-4 py-2">
+      <Menu />
+      <div class="flex space-x-2">
+        <ThemeToggle client:load />
+        <LangToggle  client:load />
+      </div>
+    </header>
+
+    <!-- Secciones del portafolio -->
+    <main class="mt-[70px] space-y-16">
+      <Inicio />
+      <Trabajos />
+      <Habilidades />
+
+      <Contacto />
+      <SobreMi />
+    </main>
+  </body>
+</html>

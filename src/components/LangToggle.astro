@@ -1,0 +1,104 @@
+
+---
+---
+<div class="relative inline-block">
+  <!-- Botón principal -->
+  <button
+    id="lang-btn"
+    aria-label="Select language"
+    class="
+      flex items-center justify-center w-[60px] h-[50px]
+      rounded-full border-[3px]
+      bg-transparent border-[var(--toggle-border)] dark:border-[var(--toggle-border-dark)]
+      transition-colors duration-300 group
+    "
+  >
+    <!-- Icono planeta con hover -->
+    <svg
+      class="w-[32px] h-[32px] transition-colors duration-300"
+      style="color: var(--toggle-sun);"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 476.16 476.16"
+      fill="currentColor"
+    >
+      <g>
+        <path
+          d="M260.113.256a481.712 481.712 0 0 1 62.686 127.812 276.132 276.132 0 0 0 93.986-32.922l8.533-5.291A238.419 238.419 0 0 0 260.113.256zM297.813
+             166.4a525.46 525.46 0 0 1-59.733 3.413 525.678 525.678 0 0 1-59.733-3.413 326 326 0 0 0-8.021 54.613h135.509a326.003
+             326.003 0 0 0-8.022-54.613zM238.08 340.48c-16.816.015-33.62.886-50.347
+             2.611a458.087 458.087 0 0 0 50.347 104.26 458.15 458.15 0 0 0 50.347-104.26
+             495.097 495.097 0 0 0-50.347-2.611zM339.831 255.147a361.462 361.462 0 0 1-8.141
+             59.836 305.49 305.49 0 0 1 103.151 37.069l9.643 6.007a237.346 237.346 0 0 0
+             31.676-102.912H339.831zM444.484 118.118l-9.643 6.008A305.492 305.492 0 0 1 331.69
+             161.28a361.53 361.53 0 0 1 8.141 59.733H476.16a237.35 237.35 0 0 0-31.676-102.895zM170.325
+             255.147c1.135 18.4 3.83 36.67 8.055 54.613a526.342 526.342 0 0 1 119.467 0 325.87 325.87
+             0 0 0 7.987-54.613H170.325zM41.318 124.126l-9.643-6.008A237.363 237.363 0 0 0 0
+             221.013h136.329a361.515 361.515 0 0 1 8.141-59.733 305.497 305.497 0 0 1-103.152-37.154zM153.361
+             348.109a276.45 276.45 0 0 0-93.986 32.905l-8.533 5.308a238.336 238.336 0 0 0
+             165.205 89.583 481.313 481.313 0 0 1-62.686-127.796zM238.08 28.826a458.32 458.32
+             0 0 0-50.347 104.243 489.946 489.946 0 0 0 50.347 2.611 490.243 490.243 0
+             0 0 50.347-2.611A458.32 458.32 0 0 0 238.08 28.826zM416.785 381.013a276.493
+             276.493 0 0 0-93.986-32.905 481.263 481.263 0 0 1-62.737 127.795 238.334 238.334
+             0 0 0 165.205-89.583l-8.482-5.307zM50.893 89.856l8.482 5.291a276.153 276.153 0 0 0
+             93.986 32.922A481.668 481.668 0 0 1 216.098.257 238.415 238.415 0 0 0 50.893
+             89.856zM136.329 255.147H0a237.333 237.333 0 0 0 31.676 102.912l9.643-6.007a305.51
+             305.51 0 0 1 103.151-37.069 361.265 361.265 0 0 1-8.141-59.836z"
+          style="transition: color 0.3s;"
+        />
+      </g>
+    </svg>
+  </button>
+
+  <!-- Panel de idiomas -->
+  <div
+    id="lang-panel"
+    class="
+      hidden absolute right-0 mt-2 w-32 rounded-xl border-[3px]
+      bg-transparent border-[var(--toggle-border)] dark:border-[var(--toggle-border-dark)]
+      shadow-md backdrop-blur-sm bg-white/10 dark:bg-black/10
+      text-black dark:text-white
+      transition-all duration-300
+      z-10
+    "
+  >
+    <button data-lang="en" class="block w-full px-3 py-2 hover:bg-[var(--toggle-ball-bg)] transition-colors">ENG</button>
+    <button data-lang="es" class="block w-full px-3 py-2 hover:bg-[var(--toggle-ball-bg)] transition-colors">SPN</button>
+  </div>
+</div>
+
+<script client:load>
+  const btn = document.getElementById("lang-btn");
+  const panel = document.getElementById("lang-panel");
+
+  // Abrir/Cerrar panel
+  btn.addEventListener("click", e => {
+    e.stopPropagation();
+    panel.classList.toggle("hidden");
+  });
+  document.addEventListener("click", e => {
+    if (!btn.contains(e.target) && !panel.contains(e.target)) {
+      panel.classList.add("hidden");
+    }
+  });
+
+  // Selección de idioma
+  panel.addEventListener("click", e => {
+    const lang = e.target.dataset.lang;
+    if (!lang) return;
+    const expires = new Date();
+    expires.setFullYear(expires.getFullYear() + 1);
+    document.cookie = `lang=${lang}; path=/; expires=${expires.toUTCString()}; sameSite=Lax`;
+    window.location.href = window.location.pathname + window.location.search;
+  });
+
+  // Glass effect on scroll
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 0) {
+      btn.classList.add("bg-white/10", "dark:bg-black/10", "backdrop-blur-sm", "shadow-md");
+      panel.classList.add("bg-white/10", "dark:bg-black/10", "backdrop-blur-sm");
+    } else {
+      btn.classList.remove("bg-white/10", "dark:bg-black/10", "backdrop-blur-sm", "shadow-md");
+      panel.classList.remove("bg-white/10", "dark:bg-black/10", "backdrop-blur-sm");
+    }
+  });
+</script>

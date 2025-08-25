@@ -1,0 +1,86 @@
+---
+// src/components/Contacto.astro
+const action = "https://formsubmit.co/tarquijoseticona@gmail.com";
+---
+<sectio id="contacto">
+<form
+  id="contact-form"
+  class="max-w-md mx-auto space-y-6"
+  action={action}
+  method="POST"
+>
+  <!-- Campos ocultos de FormSubmit -->
+  <input type="hidden" name="_captcha" value="false" />
+  <input type="hidden" name="_subject" value="Nuevo mensaje desde tu portafolio" />
+
+  <label class="block">
+    <span class="block mb-1">Nombre</span>
+    <input name="name" type="text" required class="w-full border rounded px-3 py-2" />
+  </label>
+
+  <label class="block">
+    <span class="block mb-1">Número</span>
+    <input name="number" type="number " required class="w-full border rounded px-3 py-2" />
+  </label>
+
+  <label class="block">
+    <span class="block mb-1">Correo</span>
+    <input name="email" type="email" required class="w-full border rounded px-3 py-2" />
+  </label>
+
+  <label class="block">
+    <span class="block mb-1">Asunto</span>
+    <input name="subject" type="text" required class="w-full border rounded px-3 py-2" />
+  </label>
+
+  <label class="block">
+    <span class="block mb-1">Mensaje</span>
+    <textarea name="message" rows="5" required class="w-full border rounded px-3 py-2"></textarea>
+  </label>
+
+  <button
+    type="submit"
+    class="inline-block bg-[var(--toggle-sun)] text-white rounded px-6 py-2 hover:opacity-90 transition"
+  >
+    Enviar
+  </button>
+
+  <p id="form-status" class="mt-4 text-center text-green-600"></p>
+</form>
+
+<script client:load>
+  const form   = document.getElementById('contact-form');
+  const status = document.getElementById('form-status');
+  // Tomamos el action directamente del formulario
+  const endpoint = form.action;
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+
+    const data = new FormData(form);
+    try {
+      const resp = await fetch(endpoint, {
+        method: 'POST',
+        body: data,
+      });
+
+      if (resp.ok) {
+        form.reset();
+        status.textContent = "¡Mensaje enviado!";
+        status.classList.replace('text-red-600', 'text-green-600');
+      } else {
+        throw new Error(`Error ${resp.status}`);
+      }
+    } catch (err) {
+      console.error(err);
+      status.textContent = "¡Ups! Algo salió mal.";
+      status.classList.replace('text-green-600', 'text-red-600');
+    }
+
+    setTimeout(() => {
+      status.textContent = "";
+      status.classList.replace('text-red-600', 'text-green-600');
+    }, 5000);
+  });
+</script>
+</section>

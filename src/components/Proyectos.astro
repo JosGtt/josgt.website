@@ -1,0 +1,47 @@
+---
+// src/components/Proyectos.astro
+const proyectos = [
+  { id: 1, img: '/assets/proyecto1.png', title: 'Proyecto 1', desc: 'Descripción breve del proyecto 1' },
+  { id: 2, img: '/assets/proyecto2.png', title: 'Proyecto 2', desc: 'Descripción breve del proyecto 2' },
+  { id: 3, img: '/assets/proyecto3.png', title: 'Proyecto 3', desc: 'Descripción breve del proyecto 3' },
+  { id: 4, img: '/assets/proyecto4.png', title: 'Proyecto 4', desc: 'Descripción breve del proyecto 4' },
+  { id: 5, img: '/assets/proyecto5.png', title: 'Proyecto 5', desc: 'Descripción breve del proyecto 5' },
+  { id: 6, img: '/assets/proyecto6.png', title: 'Proyecto 6', desc: 'Descripción breve del proyecto 6' },
+  { id: 7, img: '/assets/proyecto7.png', title: 'Proyecto 7', desc: 'Descripción breve del proyecto 7' },
+  { id: 8, img: '/assets/proyecto8.png', title: 'Proyecto 8', desc: 'Descripción breve del proyecto 8' },
+];
+---
+
+<section id="proyectos" class="py-20 px-4 md:px-16">
+  <h2 class="text-3xl font-bold text-center mb-12">Proyectos</h2>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    {proyectos.map((p) => (
+      <article
+        key={p.id}
+        class="border-2 border-[var(--toggle-border)] dark:border-[var(--toggle-border-dark)] rounded-2xl p-6 flex flex-col"
+      >
+        {/* Imagen */}
+        <img
+          src={p.img}
+          alt={p.title}
+          class="w-full h-40 object-cover rounded-lg mb-4"
+        />
+
+        {/* Título y descripción */}
+        <h3 class="text-xl font-semibold mb-2">{p.title}</h3>
+        <p class="text-sm flex-1">{p.desc}</p>
+
+        {/* Iconos de tecnologías */}
+        <div class="mt-4 flex space-x-3">
+          {/* Aquí puedes importar/reusar tus componentes SVG:
+              <IconReact />, <IconNode />, … */}
+          <svg class="w-6 h-6 fill-current text-[var(--toggle-sun)] dark:text-[var(--toggle-sun-dark)]" viewBox="0 0 24 24">…</svg>
+          <svg class="w-6 h-6 fill-current text-[var(--toggle-sun)] dark:text-[var(--toggle-sun-dark)]" viewBox="0 0 24 24">…</svg>
+          <svg class="w-6 h-6 fill-current text-[var(--toggle-sun)] dark:text-[var(--toggle-sun-dark)]" viewBox="0 0 24 24">…</svg>
+          <svg class="w-6 h-6 fill-current text-[var(--toggle-sun)] dark:text-[var(--toggle-sun-dark)]" viewBox="0 0 24 24">…</svg>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>

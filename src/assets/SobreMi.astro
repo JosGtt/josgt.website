@@ -1,0 +1,165 @@
+---
+// src/components/SobreMi.astro
+import WSP from '../components/icons/WSP.astro';
+import Gmail from '../components/icons/Gmail.astro';
+import LN from '../components/icons/LN.astro';
+import CV from '../components/icons/CV.astro';
+---
+<section id="sobremi" class="py-20 px-4 md:px-16 bg-[var(--toggle-bg)] transition-colors">
+  <h2 class="text-3xl font-bold text-center mb-6 text-[var(--toggle-sun)] dark:text-[var(--toggle-sun-dark)]">
+    Sobre mí
+  </h2>
+
+  <!-- Texto: color eliminado (hereda color por defecto) -->
+  <p class="max-w-2xl mx-auto text-center text-lg leading-relaxed mb-12">
+    Soy un desarrollador con total disponibilidad y dedicación inmediata al trabajo.
+    Como estudiante con más de <strong>1 año de aprendizaje intensivo</strong>,
+    busco oportunidades laborales donde aportar mis conocimientos y seguir creciendo.
+  </p>
+
+  <!-- Iconos: MUCHO más abajo (mt-32) -->
+  <div class="flex justify-center mt-32">
+    <div class="flex items-center gap-6">
+
+      <!-- WhatsApp: botón que muestra popover con QR encima -->
+      <div class="relative">
+        <button
+          id="wspBtn"
+          class="tech-pill tech-git inline-flex items-center justify-center rounded-full border-0 bg-transparent p-1"
+          aria-label="WhatsApp"
+          type="button"
+          style="padding:.25rem;"
+        >
+          <span class="tech-icon fill-current" style="width:40px;height:40px;display:inline-block;">
+            <WSP class="w-full h-full fill-current" />
+          </span>
+        </button>
+
+        <!-- popover QR (inicialmente oculto) -->
+        <div id="wspPopover" class="hidden absolute -top-56 left-1/2 transform -translate-x-1/2 w-44 bg-white dark:bg-[#111] rounded-xl shadow-lg z-50 p-3 text-center">
+          <button id="wspClose" class="absolute right-2 top-2 text-sm opacity-80 hover:opacity-100" aria-label="Cerrar">✕</button>
+          <img src="/assets/jose.jpeg" alt="QR WhatsApp" class="mx-auto w-36 h-36 object-cover rounded-md" onerror="this.style.opacity=.6" />
+          <p class="mt-2 text-xs text-gray-700 dark:text-gray-300">Escanea o guarda mi contacto</p>
+        </div>
+      </div>
+
+      <!-- Gmail: copia email -->
+      <div class="relative">
+        <button
+          id="gmailBtn"
+          class="tech-pill tech-github inline-flex items-center justify-center rounded-full border-0 bg-transparent p-1"
+          aria-label="Gmail - copiar email"
+          type="button"
+          style="padding:.25rem;"
+        >
+          <span class="tech-icon fill-current" style="width:40px;height:40px;display:inline-block;">
+            <Gmail class="w-full h-full fill-current" />
+          </span>
+        </button>
+      </div>
+
+      <!-- LinkedIn: enlace -->
+      <a
+        id="lnLink"
+        class="tech-pill tech-net inline-flex items-center justify-center rounded-full border-0 bg-transparent p-1"
+        href="https://www.linkedin.com/in/jose-gonzalo-tarqui-ticona-746251332/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="LinkedIn"
+        style="padding:.25rem;"
+      >
+        <span class="tech-icon fill-current" style="width:40px;height:40px;display:inline-block;">
+          <LN class="w-full h-full fill-current" />
+        </span>
+      </a>
+
+      <!-- CV: descarga -->
+      <a
+        id="cvLink"
+        class="tech-pill tech-internet inline-flex items-center justify-center rounded-full border-0 bg-transparent p-1"
+        href="/assets/CV.pdf"
+        download
+        aria-label="Descargar CV"
+        style="padding:.25rem;"
+      >
+        <span class="tech-icon fill-current" style="width:40px;height:40px;display:inline-block;">
+          <CV class="w-full h-full fill-current" />
+        </span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Toast "Copiado" -->
+  <div id="copyToast" class="pointer-events-none fixed bottom-12 left-1/2 transform -translate-x-1/2 bg-[var(--toggle-sun)] text-white px-4 py-2 rounded-full opacity-0 transition-opacity duration-500 z-50">
+    Copiado
+  </div>
+
+  <style is:global>
+    /* Ajustes mínimos locales */
+    #wspPopover { width: 11rem; }
+    @media(min-width:768px) { #wspPopover { width: 12rem; } }
+
+    @keyframes toast-fade {
+      0% { opacity: 0; transform: translateY(6px) scale(.98); }
+      10% { opacity: 1; transform: translateY(0) scale(1); }
+      90% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-6px) scale(.98); }
+    }
+    #wspPopover button { background: transparent; border: 0; cursor: pointer; color: inherit; }
+  </style>
+
+  <script type="module" client:load>
+    // WhatsApp popover logic
+    const wspBtn = document.getElementById('wspBtn');
+    const wspPopover = document.getElementById('wspPopover');
+    const wspClose = document.getElementById('wspClose');
+
+    function showWsp() { wspPopover.classList.remove('hidden'); }
+    function hideWsp() { wspPopover.classList.add('hidden'); }
+
+    wspBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (wspPopover.classList.contains('hidden')) showWsp(); else hideWsp();
+    });
+    wspClose?.addEventListener('click', (e) => { e.stopPropagation(); hideWsp(); });
+
+    document.addEventListener('click', (ev) => {
+      if (!wspPopover) return;
+      if (wspPopover.classList.contains('hidden')) return;
+      if (!wspPopover.contains(ev.target) && !wspBtn.contains(ev.target)) {
+        hideWsp();
+      }
+    });
+
+    // Copiar email (Gmail)
+    const gmailBtn = document.getElementById('gmailBtn');
+    const copyToast = document.getElementById('copyToast');
+    const EMAIL = 'tarquijoseticona@gmail.com';
+
+    function showToast() {
+      if (!copyToast) return;
+      copyToast.style.animation = 'none';
+      copyToast.style.opacity = '1';
+      copyToast.style.animation = 'toast-fade 3s ease forwards';
+    }
+
+    gmailBtn?.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      try {
+        await navigator.clipboard.writeText(EMAIL);
+        showToast();
+      } catch (err) {
+        const ta = document.createElement('textarea');
+        ta.value = EMAIL;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); showToast(); } catch (e) { console.warn('copy fallback failed', e); }
+        document.body.removeChild(ta);
+      }
+    });
+
+    wspPopover?.addEventListener('click', (e) => e.stopPropagation());
+  </script>
+</section>

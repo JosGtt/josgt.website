@@ -1,0 +1,84 @@
+---
+// src/components/ThemeToggle.astro
+import SunIcon  from "../components/icons/SunIcon.astro";
+import MoonIcon from "../components/icons/MoonIcon.astro";
+---  
+<input
+  type="checkbox"
+  id="theme-toggle-chk"
+  class="sr-only"
+  aria-label="Toggle theme"
+/>
+<label for="theme-toggle-chk" class="inline-block cursor-pointer">
+  <div
+    id="theme-toggle-container"
+    class="
+      relative w-[120px] h-[50px] rounded-full border-[3px]
+      bg-transparent
+      border-[var(--toggle-border)] dark:border-[var(--toggle-border-dark)]
+      transition-all duration-300
+    "
+  >
+    <SunIcon
+      class="toggle-icon sun absolute left-[18px] top-1/2 -translate-y-1/2 w-[32px] h-[32px] z-10 pointer-events-none transition-colors duration-300"
+      style="color: var(--toggle-sun);"
+    />
+    <MoonIcon
+      class="toggle-icon moon absolute right-[18px] top-1/2 -translate-y-1/2 w-[32px] h-[32px] z-10 pointer-events-none transition-colors duration-300"
+      style="color: var(--toggle-moon);"
+    />
+    <div
+      id="theme-toggle-ball"
+      class="
+        absolute top-[5px] w-[35px] h-[35px] rounded-full border-[3px]
+        transition-all duration-300 z-20 pointer-events-none
+      "
+      style="left: 17px; border-color: var(--toggle-ball-border); background: var(--toggle-ball-bg);"
+    ></div>
+  </div>
+</label>
+
+<script client:load>
+  const chk       = document.getElementById('theme-toggle-chk');
+  const ball      = document.getElementById('theme-toggle-ball');
+  const container = document.getElementById('theme-toggle-container');
+  const sun       = container.querySelector('.toggle-icon.sun');
+  const moon      = container.querySelector('.toggle-icon.moon');
+
+  function updateToggle() {
+    if (chk.checked) {
+      ball.style.left         = '63px';
+      ball.style.background   = 'var(--toggle-ball-bg-dark)';
+      ball.style.borderColor  = 'var(--toggle-ball-border-dark)';
+      sun.style.color         = 'var(--toggle-sun-dark)';
+      moon.style.color        = 'var(--toggle-moon-dark)';
+      container.style.borderColor = 'var(--toggle-border-dark)';
+    } else {
+      ball.style.left         = '17px';
+      ball.style.background   = 'var(--toggle-ball-bg)';
+      ball.style.borderColor  = 'var(--toggle-ball-border)';
+      sun.style.color         = 'var(--toggle-sun)';
+      moon.style.color        = 'var(--toggle-moon)';
+      container.style.borderColor = 'var(--toggle-border)';
+    }
+  }
+
+  chk.addEventListener('change', updateToggle);
+  updateToggle();
+
+  // Persist theme
+  chk.checked = document.documentElement.classList.contains('dark');
+  chk.addEventListener('change', () => {
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.theme = isDark ? 'dark' : 'light';
+  });
+
+  // Glass effect on scroll
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 0) {
+      container.classList.add('bg-white/10','dark:bg-black/10','backdrop-blur-sm','shadow-md');
+    } else {
+      container.classList.remove('bg-white/10','dark:bg-black/10','backdrop-blur-sm','shadow-md');
+    }
+  });
+</script>

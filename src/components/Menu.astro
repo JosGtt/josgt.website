@@ -1,0 +1,153 @@
+---
+import LinesIcon from "../components/icons/LinesIcon.astro";
+const {} = Astro.props;
+
+const links = [
+  { label: 'Inicio',       id: 'inicio'      },
+  { label: 'Trabajos',     id: 'trabajos'    },
+  { label: 'Habilidades',  id: 'habilidades' },
+  /*{ label: 'Proyectos',    id: 'proyectos'   },*/
+  { label: 'Contacto',     id: 'contacto'    },
+  { label: 'Sobre\u00A0Mí', id: 'sobremi'     }  /* espacio no separable */
+];
+---
+
+<nav
+  id="site-menu"
+  class="
+    flex items-center gap-2
+    p-2 rounded-full border-[3px] border-[var(--card-border)]
+    bg-transparent transition-all duration-300 text-glow z-40 relative
+  "
+>
+  <!-- Desktop links (hidden on small screens) -->
+  <ul class="hidden md:flex items-center gap-2">
+    {links.map(({ label, id }, i) => (
+      <li key={i}>
+        <a
+          href={`#${id}`}
+          class="
+            px-4 py-2 rounded-xl border-[var(--card-border)]
+            font-semibold transition-colors duration-300
+            hover:bg-[var(--nav-hover-bg-light)] whitespace-nowrap cursor-pointer
+          "
+        >
+          {label}
+        </a>
+      </li>
+    ))}
+  </ul>
+
+  <!-- Mobile hamburger (visible on small screens) -->
+  <button
+    id="menu-toggle"
+    class="md:hidden w-12 h-12 rounded-full border-[3px] border-[var(--card-border)] flex items-center justify-center p-2 bg-transparent cursor-pointer transition-all duration-300"
+    aria-label="Toggle menu"
+    aria-expanded="false"
+    type="button"
+  >
+    <LinesIcon class="w-6 h-6 fill-current text-[var(--card-border)]" />
+  </button>
+
+  <!-- Mobile menu (dropdown) — no ocupa todo el ancho y aplica cristal cuando está abierto -->
+  <div
+    id="mobile-menu"
+    class="hidden md:hidden absolute left-0 top-full mt-2 flex flex-col items-stretch gap-2 py-2 rounded-md border-[1px] border-[var(--card-border)] bg-transparent transition-all duration-200 z-50"
+    style="min-width:160px; max-width:260px; width:auto;"
+    role="menu"
+  >
+    {links.map(({ label, id }, i) => (
+      <a
+        key={i}
+        href={`#${id}`}
+        class="block text-center px-4 py-2 rounded-md font-semibold transition-colors duration-200 hover:bg-[var(--nav-hover-bg-light)] cursor-pointer"
+        role="menuitem"
+      >
+        {label}
+      </a>
+    ))}
+  </div>
+</nav>
+
+<script is:client>
+  const menu = document.getElementById('site-menu');
+  const toggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  // 👇 clases EXACTAS del cristal que tenías y que quieres mantener
+  const glassClasses = [
+    'bg-white/10',
+    'dark:bg-black/10',
+    'backdrop-blur-sm',
+    'shadow-md'
+  ];
+
+  // -- mantén cristal en el nav cuando scrollees (igual que antes) --
+  function handleScrollGlass() {
+    if (window.scrollY > 0) {
+      menu.classList.add(...glassClasses);
+      toggle.classList.add(...glassClasses);
+    } else {
+      menu.classList.remove(...glassClasses);
+      // quitar glass del toggle solo si el dropdown está cerrado
+      if (mobileMenu.classList.contains('hidden')) {
+        toggle.classList.remove(...glassClasses);
+      }
+    }
+  }
+  window.addEventListener('scroll', handleScrollGlass);
+  handleScrollGlass();
+
+  // -- Posicionar dropdown justo debajo del botón (no full-width) --
+  function positionDropdownUnderButton() {
+    const navRect = menu.getBoundingClientRect();
+    const btnRect = toggle.getBoundingClientRect();
+
+    // left relativo al nav (garantiza que el dropdown quede bajo el botón)
+    const left = Math.max(8, btnRect.left - navRect.left);
+
+    // top = abajo del botón + pequeño gap
+    const top = btnRect.bottom - navRect.top + 8;
+
+    mobileMenu.style.left = `${left}px`;
+    mobileMenu.style.top = `${top}px`;
+  }
+
+  // -- Abrir / cerrar móvil (y aplicar cristal al dropdown) --
+  function openMobile() {
+    positionDropdownUnderButton();
+    mobileMenu.classList.remove('hidden');
+    mobileMenu.classList.add(...glassClasses);
+    toggle.setAttribute('aria-expanded', 'true');
+    // opcional: focus para accesibilidad
+    mobileMenu.querySelector('[role="menuitem"]')?.focus?.();
+  }
+  function closeMobile() {
+    mobileMenu.classList.add('hidden');
+    mobileMenu.classList.remove(...glassClasses);
+    toggle.setAttribute('aria-expanded', 'false');
+    if (window.scrollY === 0) toggle.classList.remove(...glassClasses);
+  }
+
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (mobileMenu.classList.contains('hidden')) openMobile();
+    else closeMobile();
+  });
+
+  // cerrar al click fuera
+  document.addEventListener('click', (e) => {
+    if (!menu.contains(e.target)) closeMobile();
+  });
+
+  // cerrar y reposicionar al redimensionar
+  window.addEventListener('resize', () => {
+    closeMobile();
+  });
+
+  // si usas devtools y mueves el toggle, reposiciona el dropdown cuando se abre
+  const mo = new MutationObserver(() => {
+    if (!mobileMenu.classList.contains('hidden')) positionDropdownUnderButton();
+  });
+  mo.observe(mobileMenu, { attributes: true, attributeFilter: ['class', 'style'] });
+</script>

@@ -1,0 +1,10 @@
+{
+  "welcome": "¡Bienvenido!",
+  "projects": "Proyectos",
+  "menu": {
+    "home": "Inicio",
+    "about": "Sobre mí",
+    "projects": "Proyectos",
+    "contact": "Contacto"
+  }
+}

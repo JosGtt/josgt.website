@@ -1,0 +1,339 @@
+---
+// src/components/Trabajos.astro
+import ReactIcon from "../components/icons/REACT.astro";
+import AstroIcon from "../components/icons/ASTRO.astro";
+import TailwindIcon from "../components/icons/TAILWIND.astro";  
+import JavaScriptIcon from "../components/icons/JS.astro";
+import HTMLIcon from "../components/icons/HTML.astro";
+import CSSIcon from "../components/icons/CSS.astro";
+import PythonIcon from "../components/icons/PYTHON.astro";
+import CSharpIcon from "../components/icons/Csharp.astro";
+import SQLIcon from "../components/icons/SQL.astro";
+import NodeIcon from "../components/icons/NODE.astro";
+import GitIcon from "../components/icons/GIT.astro";
+import GitHubIcon from "../components/icons/GITHUB.astro";
+import RubyIcon from "../components/icons/RUBY.astro";
+import LARAVELIcon from "../components/icons/LARAVEL.astro";
+import PHPIcon from "../components/icons/PHP.astro";
+import NETIcon from "../components/icons/NET.astro";
+import InternetIcon from "../components/icons/Internet.astro";
+---
+<style>
+  /* Animaciones modal */
+  @keyframes modal-in { from{opacity:0;transform:translateY(-10px);} to{opacity:1;transform:translateY(0);} }
+  @keyframes modal-out{ from{opacity:1;transform:translateY(0);} to{opacity:0;transform:translateY(-10px);} }
+  .animate-modal-in{animation:modal-in 200ms ease-out forwards;}
+  .animate-modal-out{animation:modal-out 150ms ease-in forwards;}
+
+  /* Grid / tarjetas */
+  .card-grid{display:grid;grid-template-columns:1fr;gap:1.5rem;width:100%;}
+  @media(min-width:768px){.card-grid{grid-template-columns:repeat(2,1fr);} }
+  .proj-card{border-radius:.75rem;overflow:hidden;background:var(--bg-light,#fff);box-shadow:0 8px 30px rgba(16,24,40,0.06);position:relative;}
+  html.dark .proj-card{background:var(--bg-dark,#111827);}
+  .proj-img{width:100%;height:300px;object-fit:cover;display:block;cursor:pointer;}
+  @media(min-width:1024px){.proj-img{height:340px;}}
+  .proj-body{padding:1rem;}
+  .proj-title{font-weight:800;font-size:1.35rem;margin-bottom:.5rem;}
+  .proj-desc{color:rgba(34,34,34,0.85);margin-bottom:.75rem;}
+  html.dark .proj-desc{color:rgba(230,230,250,0.85);}
+
+  /* tech pills (local visual wrapper; colors/neon in global.css) */
+  .tech-row{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;margin-top:.25rem;}
+  .tech-pill{display:inline-flex;align-items:center;gap:.5rem;padding:.3rem .45rem;border-radius:.6rem;background:rgba(0,0,0,0.03);cursor:default;}
+  .tech-pill a{display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;color:inherit;}
+  html.dark .tech-pill{background:rgba(255,255,255,0.06);}
+  .tech-icon{width:28px;height:28px;display:block;}
+
+  /* live "pill" (reusa tech-pill styles) */
+  .live-pill { cursor: pointer; }
+
+  /* Modal */
+  #modal.hidden{display:none;}
+  #modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(54,11,58,0.29);z-index:50;}
+  #modalDialog{background:var(--bg-light,#fff);border-radius:.6rem;padding:1.25rem;max-width:1000px;width:calc(100% - 2rem);border:2px solid var(--toggle-sun);}
+  html.dark #modalDialog{background:var(--bg-dark,#111827);border-color:var(--toggle-border);}
+  #modalImg{width:100%;max-height:70vh;object-fit:contain;border-radius:8px;display:block;margin:0 auto;}
+  .modal-caption{margin-top:.75rem;color:rgba(34,34,34,0.9);}
+  html.dark .modal-caption{color:rgba(230,230,250,0.9);}
+
+  .nav-btn{position:absolute;top:50%;transform:translateY(-50%);background:var(--toggle-bg);padding:.45rem;border-radius:999px;border:1px solid var(--toggle-border);cursor:pointer;}
+  html.dark .nav-btn{background:var(--toggle-bg-dark);}
+  .nav-left{left:1rem;}
+  .nav-right{right:1rem;}
+
+  /* small screens tweaks */
+  @media(max-width:420px){ .proj-img{height:220px;} #modalDialog{padding:.75rem;} }
+
+  /* helper when an image fails to load */
+  .img-missing { opacity: .45; filter: grayscale(.8); }
+</style>
+
+<section id="trabajos" class="py-20">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold mb-8">Trabajos Destacados</h2>
+
+    <div class="card-grid">
+      <!-- Trabajo 0: Viacha (index 0) -->
+      <article class="proj-card" data-project-index="0">
+        <!-- thumb src will be synced with projects[0].images[0].img by script -->
+        <img data-project-index="0" src="/assets/viacha1.png" alt="Viacha — preview" class="proj-img" />
+
+        <div class="proj-body">
+          <div class="proj-title">Gobierno Autónomo Municipal de Viacha</div>
+          <div class="proj-desc">Sitio oficial del municipio de Viacha. Implementación responsive y optimizada. backend frontend inicio de sesión sistema</div>
+
+          <div class="tech-row">
+            <div class="tech-pill tech-html" title="HTML">
+              <HTMLIcon class="tech-icon fill-current" />
+            </div>
+
+            <div class="tech-pill tech-css" title="CSS">
+              <CSSIcon class="tech-icon fill-current" />
+            </div>
+
+            <div class="tech-pill tech-js" title="JavaScript">
+              <JavaScriptIcon class="tech-icon fill-current" />
+            </div>
+
+            <div class="tech-pill tech-php" title="PHP">
+              <PHPIcon class="tech-icon fill-current" />
+            </div>
+
+            <div class="tech-pill tech-internet live-pill" title="Abrir sitio en vivo">
+              <a
+                href="https://viacha.gob.bo/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Abrir Viacha en una nueva pestaña"
+                onclick="event.stopPropagation()"
+              >
+                <InternetIcon class="tech-icon fill-current" />
+                <span class="sr-only">En vivo</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Trabajo 1: Domposer (index 1) -->
+      <article class="proj-card" data-project-index="1">
+        <!-- thumb src will be synced with projects[1].images[0].img by script -->
+        <img data-project-index="1" src="/assets/trabajo2.jpg" alt="Domposer — preview" class="proj-img" />
+
+        <div class="proj-body">
+          <div class="proj-title">Gestor de ventas, consultas y reportes de centro medico piloto</div>
+          <div class="proj-desc">Una Base de datos con interfas para la gestión de un centro médico, que controla la venta, ayuda a la gestion de consultas, recauda las anteriores consultas con capacidad de añadir y eliminar modificar registros de pacientes</div>
+
+          <div class="tech-row">
+            <div class="tech-pill tech-html" title="HTML">
+              <HTMLIcon class="tech-icon fill-current" />
+            </div>
+
+            <div class="tech-pill tech-css" title="CSS">
+              <CSSIcon class="tech-icon fill-current" />
+            </div>
+
+            <div class="tech-pill tech-js" title="JavaScript">
+              <JavaScriptIcon class="tech-icon fill-current" />
+            </div>
+
+            <div class="tech-pill tech-react" title="React">
+              <ReactIcon class="tech-icon fill-current" />
+            </div>
+            <div class="tech-pill tech-astro" title="Tailwind">
+              <TailwindIcon class="tech-icon fill-current" />
+            </div>
+            <div class="tech-pill tech-git" title="Git">
+              <GitIcon class="tech-icon fill-current" />
+            </div>
+            <div class="tech-pill tech-github" title="GitHub">
+              <GitHubIcon class="tech-icon fill-current" />
+            </div>
+            <div class="tech-pill tech-sql" title="SQL">
+              <SQLIcon class="tech-icon fill-current" />
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <!-- Modal (oculto inicialmente) -->
+  <div id="modal" class="hidden" aria-hidden="true">
+    <div id="modalDialog" onclick="event.stopPropagation()">
+      <img id="modalImg" src="" alt="" />
+      <p id="modalDesc" class="modal-caption"></p>
+
+      <button id="prevBtn" class="nav-btn nav-left" aria-label="Anterior" type="button">
+        <svg class="w-6 h-6 fill-current text-[var(--toggle-sun)]" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      </button>
+
+      <button id="nextBtn" class="nav-btn nav-right" aria-label="Siguiente" type="button">
+        <svg class="w-6 h-6 fill-current text-[var(--toggle-sun)]" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Datos serializados (Viacha y Domposer; Domposer usa Trabajo1..Trabajo5) -->
+  <script type="application/json" id="projects-data">
+    {
+      "projects": [
+        {
+          "title": "Viacha (Municipal)",
+          "images": [
+            { "img": "/assets/viacha1.png", "desc": "inicio" },
+            { "img": "/assets/viacha2.png", "desc": "descripcion" },
+            { "img": "/assets/viacha3.png", "desc": "servicios" },
+            { "img": "/assets/viacha4.png", "desc": "departamentos" },
+            { "img": "/assets/viacha5.png", "desc": "Sección de contacto y mapa." },
+            { "img": "/assets/viacha6.png", "desc": "Noticias" },
+            { "img": "/assets/viacha7.png", "desc": "noticias" },
+            { "img": "/assets/viacha8.png", "desc": "noticias" },
+            { "img": "/assets/viacha9.png", "desc": "Fotos" },
+            { "img": "/assets/viacha10.png", "desc": "eventos" }
+          ],
+          "live": "https://viacha.gob.bo/"
+        },
+        {
+          "title": "Sistema de control, venta y gestion de un centro medico",
+          "images": [
+            { "img": "/assets/Trabajo1.png", "desc": "Interfaz" },
+            { "img": "/assets/Trabajo2.png", "desc": "ventas" },
+            { "img": "/assets/Trabajo3.png", "desc": "busqueda" },
+            { "img": "/assets/Trabajo4.png", "desc": "añadir" },
+            { "img": "/assets/Trabajo5.png", "desc": "consultas" }
+          ],
+          "live": null
+        }
+      ]
+    }
+  </script>
+
+  <!-- Script modal + synchronizer -->
+  <script client:load>
+    // parse projects
+    const raw = document.getElementById('projects-data')?.textContent || '{"projects": []}';
+    let projects = [];
+    try { projects = JSON.parse(raw).projects || []; } catch(e){ console.warn('projects-data parse error', e); }
+
+    // sync thumbnails: set each .proj-img src to the first image in its project (if exists)
+    (function syncThumbnails() {
+      const thumbEls = Array.from(document.querySelectorAll('.proj-img'));
+      thumbEls.forEach((imgEl) => {
+        const idxAttr = imgEl.dataset.projectIndex;
+        const idx = typeof idxAttr !== 'undefined' ? Number(idxAttr) : NaN;
+        if (Number.isNaN(idx) || !projects[idx] || !projects[idx].images || !projects[idx].images[0]) return;
+        const first = projects[idx].images[0].img;
+        // only set if different (reduces flicker)
+        if (imgEl.src === first || imgEl.getAttribute('src') === first) {
+          // already set
+        } else {
+          imgEl.src = first;
+        }
+        // attach click listener to open modal for this project
+        imgEl.removeEventListener('click', imgEl._openHandler);
+        imgEl._openHandler = (e) => { e.stopPropagation(); openModal(idx); };
+        imgEl.addEventListener('click', imgEl._openHandler);
+        // detect load error
+        imgEl.onerror = () => {
+          console.warn(`Thumbnail load failed for project ${idx} — tried: ${first}`);
+          imgEl.classList.add('img-missing');
+        };
+      });
+    })();
+
+    let idx = 0;    // project index
+    let slide = 0;  // slide index within project
+    let isOpen = false;
+
+    const modal = document.getElementById("modal");
+    const dialog = document.getElementById("modalDialog");
+    const modalImg = document.getElementById("modalImg");
+    const modalDesc = document.getElementById("modalDesc");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    function renderSlide() {
+      const s = projects[idx]?.images?.[slide];
+      if (!s) {
+        modalImg.src = '';
+        modalDesc.innerText = '';
+        return;
+      }
+      modalImg.src = s.img;
+      modalImg.alt = projects[idx]?.title || `Proyecto ${idx + 1}`;
+      modalDesc.innerText = s.desc || '';
+      // detect modal image load errors
+      modalImg.onerror = () => {
+        console.warn(`Modal image load failed for project ${idx} slide ${slide} — tried: ${s.img}`);
+        modalImg.classList.add('img-missing');
+      };
+    }
+
+    function openModal(i) {
+      idx = Number(i) || 0;
+      slide = 0;
+      if (!projects[idx]) {
+        console.warn('openModal: project not found for index', idx);
+        return;
+      }
+      renderSlide();
+      dialog.classList.remove('animate-modal-out');
+      void dialog.offsetWidth; // reflow
+      modal.classList.remove('hidden');
+      dialog.classList.add('animate-modal-in');
+      if (!isOpen) window.addEventListener('keydown', keyHandler);
+      isOpen = true;
+    }
+
+    function closeModal() {
+      if (!isOpen) {
+        modal.classList.add('hidden');
+        return;
+      }
+      dialog.classList.remove('animate-modal-in');
+      const onAnimEnd = () => {
+        modal.classList.add('hidden');
+        dialog.classList.remove('animate-modal-out');
+        window.removeEventListener('keydown', keyHandler);
+        isOpen = false;
+      };
+      dialog.addEventListener('animationend', onAnimEnd, { once: true });
+      dialog.classList.add('animate-modal-out');
+    }
+
+    function showPrev() {
+      const imgs = projects[idx]?.images;
+      if (!imgs || imgs.length === 0) return;
+      slide = (slide - 1 + imgs.length) % imgs.length;
+      renderSlide();
+    }
+
+    function showNext() {
+      const imgs = projects[idx]?.images;
+      if (!imgs || imgs.length === 0) return;
+      slide = (slide + 1) % imgs.length;
+      renderSlide();
+    }
+
+    function keyHandler(ev) {
+      if (!isOpen) return;
+      if (ev.key === "Escape") closeModal();
+      if (ev.key === "ArrowLeft") showPrev();
+      if (ev.key === "ArrowRight") showNext();
+    }
+
+    // idempotent listeners
+    prevBtn?.addEventListener('click', (e) => { e.stopPropagation(); showPrev(); });
+    nextBtn?.addEventListener('click', (e) => { e.stopPropagation(); showNext(); });
+
+    // overlay click closes only if clicked on overlay root
+    modal?.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+    // expose for compatibility (if you still want to call from inline)
+    window.openModal = openModal;
+    window.closeModal = closeModal;
+    window.showPrev = showPrev;
+    window.showNext = showNext;
+  </script>
+</section>

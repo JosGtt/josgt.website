@@ -1,0 +1,296 @@
+/*─────────────────────────────────────────────────────────────────────────────
+  Imports & Tailwind Setup
+─────────────────────────────────────────────────────────────────────────────*/
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+@import "tailwindcss";
+
+@layer tailwind {
+  darkMode: 'class';
+}
+
+/*─────────────────────────────────────────────────────────────────────────────
+  Theme Tokens (@theme)
+─────────────────────────────────────────────────────────────────────────────*/
+@theme {
+  /* Toggle colors */
+  --toggle-border:          #c3c7e5;
+  --toggle-bg:              transparent;
+  --toggle-sun:             #7c3aed;
+  --toggle-moon:            #a3a3c2;
+  --toggle-ball-border:     #c3c7e5;
+  --toggle-ball-bg:         #722de950;
+  --toggle-ball-bg-dark:    #ab81d99c;
+  --toggle-ball-border-dark:#7c3aed;
+  --toggle-bg-dark:         #181926;
+  --toggle-sun-dark:        #a3a3c2;
+  --toggle-moon-dark:       #c3a3e5;
+  --toggle-sun-light:       #d1aaff;
+  --toggle-sun-hover:       #a855f7;
+  --toggle-sun-hover-dark:  #c3a3e5;
+}
+
+/*─────────────────────────────────────────────────────────────────────────────
+  Global Variables & Palette
+─────────────────────────────────────────────────────────────────────────────*/
+:root {
+  /* Background & Text */
+  --bg-light:       #8354f013;
+  --text-light:     #2A1A4A;
+  --bg-dark:        #111111;
+  --text-dark:      #eeeeee;
+
+  /* Card & Icon */
+  --card-border:    var(--toggle-sun);
+  --icon-color:     var(--toggle-sun);
+
+  /* Navigation */
+  --nav-bg:         var(--toggle-bg);
+  --nav-border:     var(--toggle-border);
+  --nav-link:       var(--toggle-sun-light);
+  --nav-link-hover: var(--toggle-sun-hover);
+  --nav-link-bg-hover: var(--toggle-ball-bg);
+  --nav-link-text-light: #7817E8;
+  --nav-hover-bg-light: #00ffff5e;
+
+  /* Cursor Halo */
+  --c-x: 0px;
+  --c-y: 0px;
+  --c-size: 120px;
+  --c-color: rgba(140, 90, 255, 0.4);
+
+  /* Font */
+  --font-display: 'Orbitron', sans-serif;
+
+  /* ---------- COLORES POR TECNOLOGÍA ---------- */
+  --color-html:    #E34F26;   /* HTML - naranja */
+  --color-css:     #264DE4;   /* CSS - azul */
+  --color-js:      #F7DF1E;   /* JS - amarillo */
+  --color-php:     #777BB3;   /* PHP - morado */
+  --color-python:  #3776AB;   /* Python - azul oscuro */
+  --color-react:   #61DAFB;   /* React - celeste */
+  --color-tailwind:#38BDF8;   /* Tailwind - celeste */
+  --color-astro:   #FF5A5F;   /* Astro - coral/rojo claro */
+  --color-laravel: #FF2D20;   /* Laravel - rojo */
+  --color-git:     #F05032;   /* Git - naranja-rojo */
+  --color-github:  #333333;   /* GitHub - gris oscuro */
+  --color-node:    #43853D;   /* Node - verde */
+  --color-sql:     #F29111;   /* SQL (ej: orange-ish) */
+  --color-csharp:  #239120;   /* C# - verde oscuro */
+  --color-net:     #512BD4;   /* .NET - violeta */
+  --color-ruby:    #CC342D;   /* Ruby - rojo oscuro */
+  --color-internet:#0077FF;   /* Internet / link - azul */}
+  
+
+/* Dark-mode overrides (ajusta si quieres tonos distintos en modo oscuro) */
+html.dark {
+  --bg-light: none; /* not used in dark */
+  --text-light: none;
+  --card-border:    var(--toggle-border);
+  --icon-color:     var(--toggle-moon);
+  --nav-bg:         var(--toggle-bg-dark);
+  --nav-border:     var(--toggle-border-dark);
+  --nav-link:       var(--toggle-sun);
+  --nav-link-hover: var(--toggle-sun-hover-dark);
+  --nav-link-bg-hover: var(--toggle-ball-bg-dark);
+  --c-color:        rgba(180, 120, 255, 0.3);
+  --nav-link-text-light: #d1aaff;
+  --nav-hover-bg-light: #c3a3e5;
+  
+
+  /* opcional: ajustar brillo del neón en dark si quieres */
+  --neon-intensity: 0.9;
+}
+
+/*─────────────────────────────────────────────────────────────────────────────
+  Base Styles
+─────────────────────────────────────────────────────────────────────────────*/
+html {
+  background-color: var(--bg-light);
+  color:            var(--text-light);
+  transition:       background-color 0.3s, color 0.3s;
+}
+
+html.dark {
+  background-color: var(--bg-dark);
+  color:            var(--text-dark);
+}
+
+body {
+  font-family: var(--font-display);
+  cursor:      auto;  /* preserve native pointer */
+}
+
+/*─────────────────────────────────────────────────────────────────────────────
+  Components & Utilities (Modal existing styles preserved)
+─────────────────────────────────────────────────────────────────────────────*/
+.modal {
+  border: 2px solid #dc09f05d;
+  color: #ab81d87c;
+}
+
+/*─────────────────────────────────────────────────────────────────────────────
+  Cursor Halo (Global)
+─────────────────────────────────────────────────────────────────────────────*/
+html::before {
+  content: '';
+  position:       fixed;
+  left:           var(--c-x);
+  top:            var(--c-y);
+  width:          var(--c-size);
+  height:         var(--c-size);
+  pointer-events: none;
+  border-radius:  50%;
+  background:     radial-gradient(circle closest-side, var(--c-color) 0%, transparent 60%);
+  transform:      translate(-50%, -50%);
+  mix-blend-mode: overlay;
+  transition:     width 0.2s ease, height 0.2s ease;
+  z-index:        9999;
+}
+.text-glow {
+  /* sombra difusa del color principal del toggle */
+  text-shadow:
+    0 0 8px var(--toggle-sun),
+    0 0 16px var(--toggle-sun-light);
+}
+
+/*─────────────────────────────────────────────────────────────────────────────
+  Tech icon pills: uso y comportamiento (agregar .tech-<name> a cada pill)
+─────────────────────────────────────────────────────────────────────────────*/
+.tech-pill {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.5rem;
+  padding:.32rem .5rem;
+  border-radius:.6rem;
+  background: rgba(0,0,0,0.03);
+  transition: transform .12s ease, box-shadow .12s ease, color .12s ease, filter .12s ease;
+  cursor: default;
+}
+
+/* Si el pill contiene un <a>, que no rompa el estilo */
+.tech-pill a { color: inherit; text-decoration: none; display:inline-flex; align-items:center; }
+
+/* El SVG debe tener class="tech-icon fill-current" o fill="currentColor" */
+.tech-icon {
+  width: 60px;
+  height: 60px;
+  color: var(--icon-color); /* color por defecto (morado toggle) */
+  transition: color .12s ease, filter .12s ease, transform .12s ease;
+}
+
+/* efecto hover general: elevación sutil y glow blanco + color */
+.tech-pill:hover {
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08), 0 0 20px rgba(255,255,255,0.02) inset;
+}
+
+/* ---------- Hover rules: cambia color y añade neón blanco + color ---------- */
+
+/* HTML */
+.tech-pill.tech-html:hover .tech-icon {
+  color: var(--color-html);
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.95)) drop-shadow(0 0 10px var(--color-html));
+}
+
+/* CSS */
+.tech-pill.tech-css:hover .tech-icon {
+  color: var(--color-css);
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.95)) drop-shadow(0 0 10px var(--color-css));
+}
+
+/* JavaScript */
+.tech-pill.tech-js:hover .tech-icon {
+  color: var(--color-js);
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.95)) drop-shadow(0 0 10px rgba(250,210,20,0.65));
+}
+
+/* PHP */
+.tech-pill.tech-php:hover .tech-icon {
+  color: var(--color-php);
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.95)) drop-shadow(0 0 10px var(--color-php));
+}
+
+/* Python */
+.tech-pill.tech-python:hover .tech-icon {
+  color: var(--color-python);
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.95)) drop-shadow(0 0 10px var(--color-python));
+}
+
+/* React */
+.tech-pill.tech-react:hover .tech-icon {
+  color: var(--color-react);
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.95)) drop-shadow(0 0 10px var(--color-react));
+}
+
+/* Tailwind */
+.tech-pill.tech-tailwind:hover .tech-icon {
+  color: var(--color-tailwind);
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.95)) drop-shadow(0 0 10px var(--color-tailwind));
+}
+
+/* Astro */
+.tech-pill.tech-astro:hover .tech-icon {
+  color: var(--color-astro);
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.95)) drop-shadow(0 0 10px var(--color-astro));
+}
+
+/* Laravel */
+.tech-pill.tech-laravel:hover .tech-icon {
+  color: var(--color-laravel);
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.95)) drop-shadow(0 0 10px var(--color-laravel));
+}
+
+/* Git */
+.tech-pill.tech-git:hover .tech-icon {
+  color: var(--color-git);
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.95)) drop-shadow(0 0 10px var(--color-git));
+}
+
+/* GitHub */
+.tech-pill.tech-github:hover .tech-icon {
+  color: var(--color-github);
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.95)) drop-shadow(0 0 8px rgba(0,0,0,0.6));
+}
+
+/* Node */
+.tech-pill.tech-node:hover .tech-icon {
+  color: var(--color-node);
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.95)) drop-shadow(0 0 10px var(--color-node));
+}
+
+/* SQL */
+.tech-pill.tech-sql:hover .tech-icon {
+  color: var(--color-sql);
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.95)) drop-shadow(0 0 10px var(--color-sql));
+}
+
+/* C# */
+.tech-pill.tech-csharp:hover .tech-icon {
+  color: var(--color-csharp);
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.95)) drop-shadow(0 0 10px var(--color-csharp));
+}
+
+/* .NET */
+.tech-pill.tech-net:hover .tech-icon {
+  color: var(--color-net);
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.95)) drop-shadow(0 0 10px var(--color-net));
+}
+
+/* Ruby */
+.tech-pill.tech-ruby:hover .tech-icon {
+  color: var(--color-ruby);
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.95)) drop-shadow(0 0 10px var(--color-ruby));
+}
+
+/* Internet (link) */
+.tech-pill.tech-internet:hover .tech-icon,
+.tech-pill.tech-internet:hover a {
+  color: var(--color-internet);
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.95)) drop-shadow(0 0 10px var(--color-internet));
+}
+
+/* Dark mode tweak: ligeramente más sutil el glow */
+html.dark .tech-pill:hover .tech-icon {
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.85));
+}

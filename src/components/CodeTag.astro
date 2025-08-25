@@ -1,0 +1,86 @@
+---
+/** CodeTag.astro
+ * Props:
+ *  - text: string, por ejemplo "<>" o "</>"
+ *  - size: tailwind sizing class (ej: "text-3xl md:text-6xl")
+ *  - boxed: boolean (si quieres el fondo rectángulo tipo "svg")
+ */
+export interface Props {
+  text?: string;
+  size?: string;
+  boxed?: boolean;
+}
+const { text = "<>", size = "text-4xl md:text-6xl", boxed = true } = Astro.props;
+
+// split into characters to wrap en <span>
+const chars = Array.from(text);
+---
+<div
+  class={`code-tag inline-flex items-center gap-2 ${boxed ? 'p-2 rounded-md' : ''}`}
+  style={`color: var(--toggle-sun); background: ${boxed ? 'rgba(0,0,0,0.05)' : 'transparent'}; -webkit-font-smoothing:antialiased;`}
+  ref={undefined}
+>
+  <div class="monospace flex items-center" aria-hidden="true">
+    {chars.map((c, i) => (
+      <span class="char inline-block opacity-0 select-none"
+            style={`--i:${i}; animation-delay: ${i * 0.08}s; ${size ? '' : ''}`}>
+        {c === ' ' ? '\u00A0' : c}
+      </span>
+    ))}
+    <span class="cursor ml-1 opacity-0">▌</span>
+  </div>
+
+  <!-- small script to add class "started" when in viewport (client:load hydration) -->
+  <script type="module" client:load>
+    const root = document.currentScript.previousElementSibling;
+    if (!root) throw new Error('root not found');
+    // Intersection to start when visible
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) {
+          root.classList.add('started');
+          io.disconnect();
+        }
+      }
+    }, {threshold: 0.25});
+    io.observe(root);
+  </script>
+
+  <style is:global>
+  /* styles specificos para CodeTag (usa variables para adaptarse a dark/light) */
+  .code-tag { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace; }
+  .code-tag .monospace { display: inline-flex; align-items: center; gap: 0.25rem; }
+  .code-tag .char {
+    transform: translateY(6px);
+    display: inline-block;
+    opacity: 0;
+    white-space: pre;
+    animation-name: code-type;
+    animation-duration: 0.14s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-out;
+    animation-play-state: paused;
+  }
+  .code-tag .cursor {
+    animation: blink 1s steps(2,end) infinite;
+    color: currentColor;
+    font-weight: 700;
+    opacity: 0;
+  }
+  .code-tag.started .char { animation-play-state: running; }
+  .code-tag.started .cursor { opacity: 1; }
+
+  @keyframes code-type {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  /* usa la variable que ya tienes en :root / html.dark */
+  .code-tag { color: var(--toggle-sun); }
+  html.dark .code-tag { color: var(--toggle-moon); }
+  </style>
+</div>
