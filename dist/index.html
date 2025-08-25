@@ -1,0 +1,635 @@
+<!DOCTYPE html><html class="transition-colors bg-white text-black dark:bg-black dark:text-white"> <head><meta charset="utf-8"><title>Mi Portafolio</title><link rel="stylesheet" href="/nuevo-port/_astro/index.D8nBxNtw.css"></head> <body class="min-h-screen p-4"> <!-- Halo flotante --> <div id="custom-halo"></div> <!-- Script para seguir el cursor y expandirse al pasar sobre enlaces --> <script is:client>
+      document.addEventListener('mousemove', (e) => {
+        document.documentElement.style.setProperty('--h-x', e.clientX + 'px');
+        document.documentElement.style.setProperty('--h-y', e.clientY + 'px');
+      });
+
+      document.querySelectorAll('a, button').forEach((el) => {
+        el.addEventListener('mouseenter', () => {
+          document.documentElement.style.setProperty('--h-size', '180px');
+        });
+        el.addEventListener('mouseleave', () => {
+          document.documentElement.style.setProperty('--h-size', '100px');
+        });
+      });
+    </script> <!-- Cabecera del sitio --> <header id="site-header" class="sticky top-0 z-50 flex justify-between items-center bg-transparent px-4 py-2"> <nav id="site-menu" class="
+    flex items-center gap-2
+    p-2 rounded-full border-[3px] border-[var(--card-border)]
+    bg-transparent transition-all duration-300 text-glow z-40 relative
+  "> <!-- Desktop links (hidden on small screens) --> <ul class="hidden md:flex items-center gap-2"> <li key="0"> <a href="#inicio" class="
+            px-4 py-2 rounded-xl border-[var(--card-border)]
+            font-semibold transition-colors duration-300
+            hover:bg-[var(--nav-hover-bg-light)] whitespace-nowrap cursor-pointer
+          "> Inicio </a> </li><li key="1"> <a href="#trabajos" class="
+            px-4 py-2 rounded-xl border-[var(--card-border)]
+            font-semibold transition-colors duration-300
+            hover:bg-[var(--nav-hover-bg-light)] whitespace-nowrap cursor-pointer
+          "> Trabajos </a> </li><li key="2"> <a href="#habilidades" class="
+            px-4 py-2 rounded-xl border-[var(--card-border)]
+            font-semibold transition-colors duration-300
+            hover:bg-[var(--nav-hover-bg-light)] whitespace-nowrap cursor-pointer
+          "> Habilidades </a> </li><li key="3"> <a href="#contacto" class="
+            px-4 py-2 rounded-xl border-[var(--card-border)]
+            font-semibold transition-colors duration-300
+            hover:bg-[var(--nav-hover-bg-light)] whitespace-nowrap cursor-pointer
+          "> Contacto </a> </li><li key="4"> <a href="#sobremi" class="
+            px-4 py-2 rounded-xl border-[var(--card-border)]
+            font-semibold transition-colors duration-300
+            hover:bg-[var(--nav-hover-bg-light)] whitespace-nowrap cursor-pointer
+          "> Sobre Mí </a> </li> </ul> <!-- Mobile hamburger (visible on small screens) --> <button id="menu-toggle" class="md:hidden w-12 h-12 rounded-full border-[3px] border-[var(--card-border)] flex items-center justify-center p-2 bg-transparent cursor-pointer transition-all duration-300" aria-label="Toggle menu" aria-expanded="false" type="button"> <svg class="w-6 h-6 fill-current text-[var(--card-border)]" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve"> <g> <path d="M21 6H3a1 1 0 1 0 0 2h18a1 1 0 1 0 0-2zM15 11H3a1 1 0 1 0 0 2h12a1 1 0 1 0 0-2zM9 16H3a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2z" class=""></path> </g> </svg> </button> <!-- Mobile menu (dropdown) — no ocupa todo el ancho y aplica cristal cuando está abierto --> <div id="mobile-menu" class="hidden md:hidden absolute left-0 top-full mt-2 flex flex-col items-stretch gap-2 py-2 rounded-md border-[1px] border-[var(--card-border)] bg-transparent transition-all duration-200 z-50" style="min-width:160px; max-width:260px; width:auto;" role="menu"> <a key="0" href="#inicio" class="block text-center px-4 py-2 rounded-md font-semibold transition-colors duration-200 hover:bg-[var(--nav-hover-bg-light)] cursor-pointer" role="menuitem"> Inicio </a><a key="1" href="#trabajos" class="block text-center px-4 py-2 rounded-md font-semibold transition-colors duration-200 hover:bg-[var(--nav-hover-bg-light)] cursor-pointer" role="menuitem"> Trabajos </a><a key="2" href="#habilidades" class="block text-center px-4 py-2 rounded-md font-semibold transition-colors duration-200 hover:bg-[var(--nav-hover-bg-light)] cursor-pointer" role="menuitem"> Habilidades </a><a key="3" href="#contacto" class="block text-center px-4 py-2 rounded-md font-semibold transition-colors duration-200 hover:bg-[var(--nav-hover-bg-light)] cursor-pointer" role="menuitem"> Contacto </a><a key="4" href="#sobremi" class="block text-center px-4 py-2 rounded-md font-semibold transition-colors duration-200 hover:bg-[var(--nav-hover-bg-light)] cursor-pointer" role="menuitem"> Sobre Mí </a> </div> </nav> <script is:client>
+  const menu = document.getElementById('site-menu');
+  const toggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  // 👇 clases EXACTAS del cristal que tenías y que quieres mantener
+  const glassClasses = [
+    'bg-white/10',
+    'dark:bg-black/10',
+    'backdrop-blur-sm',
+    'shadow-md'
+  ];
+
+  // -- mantén cristal en el nav cuando scrollees (igual que antes) --
+  function handleScrollGlass() {
+    if (window.scrollY > 0) {
+      menu.classList.add(...glassClasses);
+      toggle.classList.add(...glassClasses);
+    } else {
+      menu.classList.remove(...glassClasses);
+      // quitar glass del toggle solo si el dropdown está cerrado
+      if (mobileMenu.classList.contains('hidden')) {
+        toggle.classList.remove(...glassClasses);
+      }
+    }
+  }
+  window.addEventListener('scroll', handleScrollGlass);
+  handleScrollGlass();
+
+  // -- Posicionar dropdown justo debajo del botón (no full-width) --
+  function positionDropdownUnderButton() {
+    const navRect = menu.getBoundingClientRect();
+    const btnRect = toggle.getBoundingClientRect();
+
+    // left relativo al nav (garantiza que el dropdown quede bajo el botón)
+    const left = Math.max(8, btnRect.left - navRect.left);
+
+    // top = abajo del botón + pequeño gap
+    const top = btnRect.bottom - navRect.top + 8;
+
+    mobileMenu.style.left = `${left}px`;
+    mobileMenu.style.top = `${top}px`;
+  }
+
+  // -- Abrir / cerrar móvil (y aplicar cristal al dropdown) --
+  function openMobile() {
+    positionDropdownUnderButton();
+    mobileMenu.classList.remove('hidden');
+    mobileMenu.classList.add(...glassClasses);
+    toggle.setAttribute('aria-expanded', 'true');
+    // opcional: focus para accesibilidad
+    mobileMenu.querySelector('[role="menuitem"]')?.focus?.();
+  }
+  function closeMobile() {
+    mobileMenu.classList.add('hidden');
+    mobileMenu.classList.remove(...glassClasses);
+    toggle.setAttribute('aria-expanded', 'false');
+    if (window.scrollY === 0) toggle.classList.remove(...glassClasses);
+  }
+
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (mobileMenu.classList.contains('hidden')) openMobile();
+    else closeMobile();
+  });
+
+  // cerrar al click fuera
+  document.addEventListener('click', (e) => {
+    if (!menu.contains(e.target)) closeMobile();
+  });
+
+  // cerrar y reposicionar al redimensionar
+  window.addEventListener('resize', () => {
+    closeMobile();
+  });
+
+  // si usas devtools y mueves el toggle, reposiciona el dropdown cuando se abre
+  const mo = new MutationObserver(() => {
+    if (!mobileMenu.classList.contains('hidden')) positionDropdownUnderButton();
+  });
+  mo.observe(mobileMenu, { attributes: true, attributeFilter: ['class', 'style'] });
+</script> <div class="flex space-x-2"> <input type="checkbox" id="theme-toggle-chk" class="sr-only" aria-label="Toggle theme"> <label for="theme-toggle-chk" class="inline-block cursor-pointer"> <div id="theme-toggle-container" class="
+      relative w-[120px] h-[50px] rounded-full border-[3px]
+      bg-transparent
+      border-[var(--toggle-border)] dark:border-[var(--toggle-border-dark)]
+      transition-all duration-300
+    "> <svg class="toggle-icon sun absolute left-[18px] top-1/2 -translate-y-1/2 w-[32px] h-[32px] z-10 pointer-events-none transition-colors duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"> <circle cx="12" cy="12" r="4"></circle> <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"></path> </svg> <svg class="toggle-icon moon absolute right-[18px] top-1/2 -translate-y-1/2 w-[32px] h-[32px] z-10 pointer-events-none transition-colors duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"> <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"></path> </svg> <div id="theme-toggle-ball" class="
+        absolute top-[5px] w-[35px] h-[35px] rounded-full border-[3px]
+        transition-all duration-300 z-20 pointer-events-none
+      " style="left: 17px; border-color: var(--toggle-ball-border); background: var(--toggle-ball-bg);"></div> </div> </label> <script client:load>
+  const chk       = document.getElementById('theme-toggle-chk');
+  const ball      = document.getElementById('theme-toggle-ball');
+  const container = document.getElementById('theme-toggle-container');
+  const sun       = container.querySelector('.toggle-icon.sun');
+  const moon      = container.querySelector('.toggle-icon.moon');
+
+  function updateToggle() {
+    if (chk.checked) {
+      ball.style.left         = '63px';
+      ball.style.background   = 'var(--toggle-ball-bg-dark)';
+      ball.style.borderColor  = 'var(--toggle-ball-border-dark)';
+      sun.style.color         = 'var(--toggle-sun-dark)';
+      moon.style.color        = 'var(--toggle-moon-dark)';
+      container.style.borderColor = 'var(--toggle-border-dark)';
+    } else {
+      ball.style.left         = '17px';
+      ball.style.background   = 'var(--toggle-ball-bg)';
+      ball.style.borderColor  = 'var(--toggle-ball-border)';
+      sun.style.color         = 'var(--toggle-sun)';
+      moon.style.color        = 'var(--toggle-moon)';
+      container.style.borderColor = 'var(--toggle-border)';
+    }
+  }
+
+  chk.addEventListener('change', updateToggle);
+  updateToggle();
+
+  // Persist theme
+  chk.checked = document.documentElement.classList.contains('dark');
+  chk.addEventListener('change', () => {
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.theme = isDark ? 'dark' : 'light';
+  });
+
+  // Glass effect on scroll
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 0) {
+      container.classList.add('bg-white/10','dark:bg-black/10','backdrop-blur-sm','shadow-md');
+    } else {
+      container.classList.remove('bg-white/10','dark:bg-black/10','backdrop-blur-sm','shadow-md');
+    }
+  });
+</script> <div class="relative inline-block"> <!-- Botón principal --> <button id="lang-btn" aria-label="Select language" class="
+      flex items-center justify-center w-[60px] h-[50px]
+      rounded-full border-[3px]
+      bg-transparent border-[var(--toggle-border)] dark:border-[var(--toggle-border-dark)]
+      transition-colors duration-300 group
+    "> <!-- Icono planeta con hover --> <svg class="w-[32px] h-[32px] transition-colors duration-300" style="color: var(--toggle-sun);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 476.16 476.16" fill="currentColor"> <g> <path d="M260.113.256a481.712 481.712 0 0 1 62.686 127.812 276.132 276.132 0 0 0 93.986-32.922l8.533-5.291A238.419 238.419 0 0 0 260.113.256zM297.813
+             166.4a525.46 525.46 0 0 1-59.733 3.413 525.678 525.678 0 0 1-59.733-3.413 326 326 0 0 0-8.021 54.613h135.509a326.003
+             326.003 0 0 0-8.022-54.613zM238.08 340.48c-16.816.015-33.62.886-50.347
+             2.611a458.087 458.087 0 0 0 50.347 104.26 458.15 458.15 0 0 0 50.347-104.26
+             495.097 495.097 0 0 0-50.347-2.611zM339.831 255.147a361.462 361.462 0 0 1-8.141
+             59.836 305.49 305.49 0 0 1 103.151 37.069l9.643 6.007a237.346 237.346 0 0 0
+             31.676-102.912H339.831zM444.484 118.118l-9.643 6.008A305.492 305.492 0 0 1 331.69
+             161.28a361.53 361.53 0 0 1 8.141 59.733H476.16a237.35 237.35 0 0 0-31.676-102.895zM170.325
+             255.147c1.135 18.4 3.83 36.67 8.055 54.613a526.342 526.342 0 0 1 119.467 0 325.87 325.87
+             0 0 0 7.987-54.613H170.325zM41.318 124.126l-9.643-6.008A237.363 237.363 0 0 0 0
+             221.013h136.329a361.515 361.515 0 0 1 8.141-59.733 305.497 305.497 0 0 1-103.152-37.154zM153.361
+             348.109a276.45 276.45 0 0 0-93.986 32.905l-8.533 5.308a238.336 238.336 0 0 0
+             165.205 89.583 481.313 481.313 0 0 1-62.686-127.796zM238.08 28.826a458.32 458.32
+             0 0 0-50.347 104.243 489.946 489.946 0 0 0 50.347 2.611 490.243 490.243 0
+             0 0 50.347-2.611A458.32 458.32 0 0 0 238.08 28.826zM416.785 381.013a276.493
+             276.493 0 0 0-93.986-32.905 481.263 481.263 0 0 1-62.737 127.795 238.334 238.334
+             0 0 0 165.205-89.583l-8.482-5.307zM50.893 89.856l8.482 5.291a276.153 276.153 0 0 0
+             93.986 32.922A481.668 481.668 0 0 1 216.098.257 238.415 238.415 0 0 0 50.893
+             89.856zM136.329 255.147H0a237.333 237.333 0 0 0 31.676 102.912l9.643-6.007a305.51
+             305.51 0 0 1 103.151-37.069 361.265 361.265 0 0 1-8.141-59.836z" style="transition: color 0.3s;"></path> </g> </svg> </button> <!-- Panel de idiomas --> <div id="lang-panel" class="
+      hidden absolute right-0 mt-2 w-32 rounded-xl border-[3px]
+      bg-transparent border-[var(--toggle-border)] dark:border-[var(--toggle-border-dark)]
+      shadow-md backdrop-blur-sm bg-white/10 dark:bg-black/10
+      text-black dark:text-white
+      transition-all duration-300
+      z-10
+    "> <button data-lang="en" class="block w-full px-3 py-2 hover:bg-[var(--toggle-ball-bg)] transition-colors">ENG</button> <button data-lang="es" class="block w-full px-3 py-2 hover:bg-[var(--toggle-ball-bg)] transition-colors">SPN</button> </div> </div> <script client:load>
+  const btn = document.getElementById("lang-btn");
+  const panel = document.getElementById("lang-panel");
+
+  // Abrir/Cerrar panel
+  btn.addEventListener("click", e => {
+    e.stopPropagation();
+    panel.classList.toggle("hidden");
+  });
+  document.addEventListener("click", e => {
+    if (!btn.contains(e.target) && !panel.contains(e.target)) {
+      panel.classList.add("hidden");
+    }
+  });
+
+  // Selección de idioma
+  panel.addEventListener("click", e => {
+    const lang = e.target.dataset.lang;
+    if (!lang) return;
+    const expires = new Date();
+    expires.setFullYear(expires.getFullYear() + 1);
+    document.cookie = `lang=${lang}; path=/; expires=${expires.toUTCString()}; sameSite=Lax`;
+    window.location.href = window.location.pathname + window.location.search;
+  });
+
+  // Glass effect on scroll
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 0) {
+      btn.classList.add("bg-white/10", "dark:bg-black/10", "backdrop-blur-sm", "shadow-md");
+      panel.classList.add("bg-white/10", "dark:bg-black/10", "backdrop-blur-sm");
+    } else {
+      btn.classList.remove("bg-white/10", "dark:bg-black/10", "backdrop-blur-sm", "shadow-md");
+      panel.classList.remove("bg-white/10", "dark:bg-black/10", "backdrop-blur-sm");
+    }
+  });
+</script> </div> </header> <!-- Secciones del portafolio --> <main class="mt-[70px] space-y-16"> <section id="inicio" class="relative py-20" <!-- <-- NO overflow-hidden -->
+>
+<div class="container mx-auto px-4 relative"> <!-- LEFT SYMBOL --> <div class="absolute z-0 pointer-events-none symbol-wrap-left" aria-hidden="true"> <!-- preserveAspectRatio y viewBox más amplio --> <svg class="symbol-svg" viewBox="0 0 300 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true"> <text x="50%" y="50%" text-anchor="middle" font-family="ui-monospace, Menlo, Monaco, 'Roboto Mono', monospace" font-weight="700" fill="currentColor">
+&lt;&gt;
+</text> </svg> </div> <!-- Contenido central --> <div class="flex flex-col md:flex-row items-center justify-center gap-8"> <div class="w-full md:w-1/2 flex flex-col items-center z-10"> <div class="hidden md:block mb-4">  </div> <h1 id="hero-title" class="text-6xl md:text-8xl font-extrabold leading-tight text-center text-glow whitespace-pre-line" style="font-family: var(--font-display); color: var(--text-light);"></h1> <p class="mt-4 text-lg md:text-xl text-[var(--text-light)] dark:text-gray-400 text-center max-w-md">
+Desarrollador · Disponibilidad inmediata · React · Astro · Tailwind
+</p> </div> </div> <!-- RIGHT SYMBOL --> <div class="absolute z-0 pointer-events-none symbol-wrap-right" aria-hidden="true"> <svg class="symbol-svg" viewBox="0 0 300 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true"> <text x="50%" y="50%" text-anchor="middle" font-family="ui-monospace, Menlo, Monaco, 'Roboto Mono', monospace" font-weight="700" fill="currentColor">
+&lt;/&gt;
+</text> </svg> </div> </div> <!-- typing + IO (sin cambios funcionales) --> <script type="module" client:load>
+    const text = "Front End\nDeveloper";
+    const titleEl = document.getElementById('hero-title');
+
+    function buildTyped(el, txt) {
+      el.innerHTML = '';
+      const lines = txt.split('\n');
+      lines.forEach((line, li) => {
+        const lineWrap = document.createElement('div');
+        lineWrap.className = 'line';
+        Array.from(line).forEach((ch, i) => {
+          const span = document.createElement('span');
+          span.className = 'hero-char';
+          span.textContent = ch === ' ' ? '\u00A0' : ch;
+          span.style.setProperty('--d', `${(li * 0.4) + i * 0.06}s`);
+          lineWrap.appendChild(span);
+        });
+        if (li === lines.length - 1) {
+          const cursor = document.createElement('span');
+          cursor.className = 'hero-cursor';
+          cursor.textContent = '▌';
+          lineWrap.appendChild(cursor);
+        }
+        el.appendChild(lineWrap);
+      });
+    }
+
+    const io = new IntersectionObserver((entries, obs) => {
+      for (const e of entries) {
+        if (e.isIntersecting) {
+          buildTyped(titleEl, text);
+          titleEl.classList.add('typing-started');
+          obs.disconnect();
+        }
+      }
+    }, { threshold: 0.2 });
+    io.observe(titleEl);
+  </script>  </section> <section id="trabajos" class="py-20" data-astro-cid-wez336wh> <div class="container mx-auto px-4" data-astro-cid-wez336wh> <h2 class="text-3xl font-bold mb-8" data-astro-cid-wez336wh>Trabajos Destacados</h2> <div class="card-grid" data-astro-cid-wez336wh> <!-- Trabajo 0: Viacha (index 0) --> <article class="proj-card" data-project-index="0" data-astro-cid-wez336wh> <!-- thumb src will be synced with projects[0].images[0].img by script --> <img data-project-index="0" src="/assets/viacha1.png" alt="Viacha — preview" class="proj-img" data-astro-cid-wez336wh> <div class="proj-body" data-astro-cid-wez336wh> <div class="proj-title" data-astro-cid-wez336wh>Gobierno Autónomo Municipal de Viacha</div> <div class="proj-desc" data-astro-cid-wez336wh>Sitio oficial del municipio de Viacha. Implementación responsive y optimizada. backend frontend inicio de sesión sistema</div> <div class="tech-row" data-astro-cid-wez336wh> <div class="tech-pill tech-html" title="HTML" data-astro-cid-wez336wh> <!--?xml version="1.0" encoding="iso-8859-1"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current" data-astro-cid-wez336wh="true" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800px" height="800px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"> <g id="c133de6af664cd4f011a55de6b000d0b"> <path display="inline" d="M108.669,0.501h23.032v22.756h21.069V0.501h23.034V69.41h-23.032V46.334h-21.069V69.41h-23.032V0.501
+		H108.669z M206.091,23.353h-20.275V0.501h63.594v22.852h-20.285V69.41h-23.032V23.353H206.091z M259.502,0.501h24.02l14.771,24.213
+		l14.759-24.213h24.023V69.41h-22.938V35.256l-15.845,24.5h-0.395l-15.856-24.5V69.41h-22.539V0.501z M348.54,0.501h23.038v46.133
+		h32.391V69.41H348.54V0.501z M74.987,100.926l32.946,369.533l147.844,41.04L404.031,470.4l32.981-369.475H74.987z M368.289,188.62
+		l-2.063,22.977l-0.906,10.188h-0.149H256h-0.158h-63.956l4.142,46.407h59.814H256h92.98h12.214l-1.106,12.172l-10.65,119.32
+		l-0.682,7.652L256,433.045v0.008l-0.208,0.059l-92.839-25.774l-6.351-71.161h20.97h24.527l3.227,36.146l50.474,13.632l0.042-0.013
+		v-0.004l50.551-13.64l5.257-58.781H256h-0.158H154.578L143.439,188.62l-1.085-12.157h113.488H256h113.374L368.289,188.62z"></path> </g> </svg> </div> <div class="tech-pill tech-css" title="CSS" data-astro-cid-wez336wh> <!--?xml version="1.0" encoding="iso-8859-1"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current" data-astro-cid-wez336wh="true" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800px" height="800px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"> <g id="c133de6af664cd4f011a55de6b001a2b"> <path display="inline" d="M204.064,46.682v22.018h-56.302V0.501h56.302v24.13h-32.172v22.051H204.064z M261.941,24.631h22.492
+		V0.501h-56.308c0,0,0,12.112,0,24.13c7.533,7.533,11.461,11.139,22.356,22.034c-6.369,0-22.356,0.022-22.356,0.021v22.014h56.308
+		V46.682L261.941,24.631z M341.746,24.631h22.49V0.501H307.93c0,0,0,12.112,0,24.13c7.531,7.533,11.461,11.139,22.355,22.034
+		c-6.365,0-22.355,0.022-22.355,0.021v22.014h56.307V46.682L341.746,24.631z M438.395,101.112l-34.203,370.486l-148.193,39.9
+		l-148.196-39.9L73.605,101.112H438.395z M369.477,176.444H255.865h-115.62l5.529,44.739h110.091h6.184l-6.184,2.574
+		l-106.067,44.177l3.518,43.73l102.549,0.333l54.963,0.175l-3.521,58.311l-51.442,14.484v-0.046l-0.422,0.116l-49.684-12.542
+		l-3.015-36.195h-0.164h-46.085h-0.162l6.032,69.876l93.5,27.649v-0.05l0.168,0.05l93-27.146L361.1,267.935H255.865h-0.26
+		l0.26-0.112l109.086-46.639L369.477,176.444z"></path> </g> </svg> </div> <div class="tech-pill tech-js" title="JavaScript" data-astro-cid-wez336wh> <!--?xml version="1.0" encoding="utf-8"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current" data-astro-cid-wez336wh="true" width="800px" height="800px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <path d="M9.633 7.968h3.751v10.514c0 4.738-2.271 6.392-5.899 6.392-0.888 0-2.024-0.148-2.764-0.395l0.42-3.036c0.518 0.173 1.185 0.296 1.925 0.296 1.58 0 2.567-0.716 2.567-3.282v-10.489zM16.641 20.753c0.987 0.518 2.567 1.037 4.171 1.037 1.728 0 2.641-0.716 2.641-1.826 0-1.012-0.79-1.629-2.789-2.32-2.764-0.987-4.59-2.517-4.59-4.961 0-2.838 2.394-4.985 6.293-4.985 1.9 0 3.258 0.37 4.245 0.839l-0.839 3.011c-0.642-0.321-1.851-0.79-3.455-0.79-1.629 0-2.419 0.765-2.419 1.604 0 1.061 0.913 1.53 3.085 2.369 2.937 1.086 4.294 2.616 4.294 4.985 0 2.789-2.122 5.158-6.688 5.158-1.9 0-3.776-0.518-4.714-1.037l0.765-3.085z"></path> </svg> </div> <div class="tech-pill tech-php" title="PHP" data-astro-cid-wez336wh> <!--?xml version="1.0" encoding="UTF-8"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current" data-astro-cid-wez336wh="true" width="800px" height="800px" viewBox="0 -127 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid"> <g> <path d="M116.447824,54.1156555 C138.734515,54.302759 154.884213,60.7284251 164.896919,73.3819622 C174.909625,86.0354994 178.213337,103.31851 174.8134,125.230993 C173.492985,135.243699 170.56348,145.063956 166.030231,154.69711 C161.684086,164.330263 155.643318,173.017208 147.897237,180.763289 C138.451187,190.583546 128.347602,196.816763 117.581136,199.46294 C106.814671,202.109117 95.6686527,203.429532 84.1484277,203.429532 L50.149063,203.429532 L39.3825975,257.26186 L0,257.26186 L40.5159096,54.1156555 L116.447824,54.1156555 Z M452.341234,54.1156555 C474.627924,54.302759 490.777623,60.7284251 500.790329,73.3819622 C510.803035,86.0354994 514.106746,103.31851 510.70681,125.230993 C509.386394,135.243699 506.456889,145.063956 501.923641,154.69711 C497.577495,164.330263 491.536728,173.017208 483.790646,180.763289 C474.344596,190.583546 464.241011,196.816763 453.474546,199.46294 C442.70808,202.109117 431.562062,203.429532 420.041837,203.429532 L386.042473,203.429532 L375.276007,257.26186 L335.89341,257.26186 L376.409319,54.1156555 L452.341234,54.1156555 Z M258.774725,0 L247.724931,54.1156555 L282.857608,54.1156555 C302.123915,54.4952082 316.47742,58.4618008 325.92347,66.0154332 C335.556623,73.5690656 338.389904,87.9279169 334.423311,109.081295 L315.440333,203.429532 L275.774407,203.429532 L293.907402,113.331216 C295.794473,103.885166 295.227817,97.1815175 292.207433,93.214925 C289.18705,89.2483324 282.670505,87.2650362 272.657799,87.2650362 L241.208386,86.9817081 L217.975487,203.429532 L178.876218,203.429532 L219.675455,0 L258.774725,0 Z M85.848396,86.415052 C83.5817716,86.6021555 81.4113719,86.6983801 79.3318511,86.6983801 L73.608,86.698 L56.6656079,171.413464 C57.7989201,171.600567 58.9322322,171.696792 60.0655444,171.696792 L64.0321369,171.696792 L64.0321369,171.696792 C82.1651315,171.883895 97.2777422,170.093048 109.364623,166.313559 C121.451504,162.346967 129.577139,148.560117 133.730835,124.947665 C137.130771,105.114703 133.730835,93.6853565 123.531025,90.6649726 C113.518319,87.6445888 100.961007,86.2279486 85.848396,86.415052 Z M421.741805,86.415052 C419.475181,86.6021555 417.304781,86.6983801 415.225261,86.6983801 L409.501,86.698 L392.559017,171.413464 C393.69233,171.600567 394.825642,171.696792 395.958954,171.696792 L399.925546,171.696792 L399.925546,171.696792 C418.058541,171.883895 433.171152,170.093048 445.258033,166.313559 C457.344914,162.346967 465.470548,148.560117 469.624244,124.947665 C473.024181,105.114703 469.624244,93.6853565 459.424435,90.6649726 C449.411729,87.6445888 436.854416,86.2279486 421.741805,86.415052 Z"></path> </g> </svg> </div> <div class="tech-pill tech-internet live-pill" title="Abrir sitio en vivo" data-astro-cid-wez336wh> <a href="https://viacha.gob.bo/" target="_blank" rel="noopener noreferrer" aria-label="Abrir Viacha en una nueva pestaña" onclick="event.stopPropagation()" data-astro-cid-wez336wh> <svg class="tech-icon fill-current" data-astro-cid-wez336wh="true" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M256 0C115.041 0 0 115.049 0 256c0 140.959 115.049 256 256 256 140.959 0 256-115.049 256-256C512 115.041 396.951 0 256 0zm-76.362 43.29c-17.564 22.331-30.328 49.94-39.16 76.71H75.621c26.263-34.746 62.314-61.693 104.017-76.71zM56.452 149.9h75.538c-6.786 28.437-10.792 59.307-11.754 91.1H30.51c2.154-32.707 11.293-63.633 25.942-91.1zm0 212.1c-14.649-27.467-23.788-58.293-25.942-91h89.726c.962 31.793 4.968 62.563 11.754 91H56.452zm19.169 30h64.856c8.83 26.763 21.594 54.376 39.161 76.71-41.703-15.017-77.754-41.964-104.017-76.71zM241 479.454C207.509 468.196 184.418 425.2 172.222 392H241v87.454zM241 362h-78.115c-7.29-28.035-11.61-58.884-12.637-91H241v91zm0-121h-90.752c1.028-32.116 5.348-62.965 12.637-91H241v91zm0-121h-68.778C184.417 86.801 207.509 43.804 241 32.546V120zm214.548 30c14.65 27.467 23.788 58.293 25.942 91h-89.726c-.962-31.793-4.968-62.563-11.754-91h75.538zm-19.169-30h-64.856c-8.83-26.763-21.594-54.376-39.161-76.71 41.703 15.017 77.754 41.964 104.017 76.71zM271 32.546C304.491 43.804 327.582 86.8 339.778 120H271V32.546zM271 150h78.115c7.29 28.035 11.61 58.884 12.637 91H271v-91zm0 120.9h90.752c-1.028 32.116-5.348 63.065-12.637 91.1H271v-91.1zm0 208.554V391.9h68.778c-12.195 33.199-35.287 76.296-68.778 87.554zm61.362-10.744c17.564-22.331 30.328-50.041 39.161-76.81h64.856c-26.263 34.746-62.314 61.793-104.017 76.81zM455.548 362H380.01c6.786-28.437 10.792-59.307 11.754-91.1h89.726c-2.154 32.707-11.293 63.633-25.942 91.1z" class=""></path></g></svg> <span class="sr-only" data-astro-cid-wez336wh>En vivo</span> </a> </div> </div> </div> </article> <!-- Trabajo 1: Domposer (index 1) --> <article class="proj-card" data-project-index="1" data-astro-cid-wez336wh> <!-- thumb src will be synced with projects[1].images[0].img by script --> <img data-project-index="1" src="/assets/trabajo2.jpg" alt="Domposer — preview" class="proj-img" data-astro-cid-wez336wh> <div class="proj-body" data-astro-cid-wez336wh> <div class="proj-title" data-astro-cid-wez336wh>Gestor de ventas, consultas y reportes de centro medico piloto</div> <div class="proj-desc" data-astro-cid-wez336wh>Una Base de datos con interfas para la gestión de un centro médico, que controla la venta, ayuda a la gestion de consultas, recauda las anteriores consultas con capacidad de añadir y eliminar modificar registros de pacientes</div> <div class="tech-row" data-astro-cid-wez336wh> <div class="tech-pill tech-html" title="HTML" data-astro-cid-wez336wh> <!--?xml version="1.0" encoding="iso-8859-1"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current" data-astro-cid-wez336wh="true" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800px" height="800px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"> <g id="c133de6af664cd4f011a55de6b000d0b"> <path display="inline" d="M108.669,0.501h23.032v22.756h21.069V0.501h23.034V69.41h-23.032V46.334h-21.069V69.41h-23.032V0.501
+		H108.669z M206.091,23.353h-20.275V0.501h63.594v22.852h-20.285V69.41h-23.032V23.353H206.091z M259.502,0.501h24.02l14.771,24.213
+		l14.759-24.213h24.023V69.41h-22.938V35.256l-15.845,24.5h-0.395l-15.856-24.5V69.41h-22.539V0.501z M348.54,0.501h23.038v46.133
+		h32.391V69.41H348.54V0.501z M74.987,100.926l32.946,369.533l147.844,41.04L404.031,470.4l32.981-369.475H74.987z M368.289,188.62
+		l-2.063,22.977l-0.906,10.188h-0.149H256h-0.158h-63.956l4.142,46.407h59.814H256h92.98h12.214l-1.106,12.172l-10.65,119.32
+		l-0.682,7.652L256,433.045v0.008l-0.208,0.059l-92.839-25.774l-6.351-71.161h20.97h24.527l3.227,36.146l50.474,13.632l0.042-0.013
+		v-0.004l50.551-13.64l5.257-58.781H256h-0.158H154.578L143.439,188.62l-1.085-12.157h113.488H256h113.374L368.289,188.62z"></path> </g> </svg> </div> <div class="tech-pill tech-css" title="CSS" data-astro-cid-wez336wh> <!--?xml version="1.0" encoding="iso-8859-1"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current" data-astro-cid-wez336wh="true" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800px" height="800px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"> <g id="c133de6af664cd4f011a55de6b001a2b"> <path display="inline" d="M204.064,46.682v22.018h-56.302V0.501h56.302v24.13h-32.172v22.051H204.064z M261.941,24.631h22.492
+		V0.501h-56.308c0,0,0,12.112,0,24.13c7.533,7.533,11.461,11.139,22.356,22.034c-6.369,0-22.356,0.022-22.356,0.021v22.014h56.308
+		V46.682L261.941,24.631z M341.746,24.631h22.49V0.501H307.93c0,0,0,12.112,0,24.13c7.531,7.533,11.461,11.139,22.355,22.034
+		c-6.365,0-22.355,0.022-22.355,0.021v22.014h56.307V46.682L341.746,24.631z M438.395,101.112l-34.203,370.486l-148.193,39.9
+		l-148.196-39.9L73.605,101.112H438.395z M369.477,176.444H255.865h-115.62l5.529,44.739h110.091h6.184l-6.184,2.574
+		l-106.067,44.177l3.518,43.73l102.549,0.333l54.963,0.175l-3.521,58.311l-51.442,14.484v-0.046l-0.422,0.116l-49.684-12.542
+		l-3.015-36.195h-0.164h-46.085h-0.162l6.032,69.876l93.5,27.649v-0.05l0.168,0.05l93-27.146L361.1,267.935H255.865h-0.26
+		l0.26-0.112l109.086-46.639L369.477,176.444z"></path> </g> </svg> </div> <div class="tech-pill tech-js" title="JavaScript" data-astro-cid-wez336wh> <!--?xml version="1.0" encoding="utf-8"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current" data-astro-cid-wez336wh="true" width="800px" height="800px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <path d="M9.633 7.968h3.751v10.514c0 4.738-2.271 6.392-5.899 6.392-0.888 0-2.024-0.148-2.764-0.395l0.42-3.036c0.518 0.173 1.185 0.296 1.925 0.296 1.58 0 2.567-0.716 2.567-3.282v-10.489zM16.641 20.753c0.987 0.518 2.567 1.037 4.171 1.037 1.728 0 2.641-0.716 2.641-1.826 0-1.012-0.79-1.629-2.789-2.32-2.764-0.987-4.59-2.517-4.59-4.961 0-2.838 2.394-4.985 6.293-4.985 1.9 0 3.258 0.37 4.245 0.839l-0.839 3.011c-0.642-0.321-1.851-0.79-3.455-0.79-1.629 0-2.419 0.765-2.419 1.604 0 1.061 0.913 1.53 3.085 2.369 2.937 1.086 4.294 2.616 4.294 4.985 0 2.789-2.122 5.158-6.688 5.158-1.9 0-3.776-0.518-4.714-1.037l0.765-3.085z"></path> </svg> </div> <div class="tech-pill tech-react" title="React" data-astro-cid-wez336wh> <!--?xml version="1.0" encoding="utf-8"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current" data-astro-cid-wez336wh="true" width="800px" height="800px" viewBox="0 -1.5 27 27" xmlns="http://www.w3.org/2000/svg"> <path d="m15.902 11.974c0 1.331-1.079 2.41-2.41 2.41s-2.41-1.079-2.41-2.41 1.079-2.41 2.41-2.41 2.41 1.079 2.41 2.41z"></path> <path d="m13.491 17.494c-.201.005-.438.008-.676.008-2.811 0-5.522-.425-8.073-1.214l.193.051c-1.351-.436-2.522-1.079-3.541-1.903l.021.016c-.789-.571-1.32-1.455-1.41-2.467l-.001-.013c0-1.594 1.747-3.154 4.681-4.172 2.512-.827 5.403-1.304 8.405-1.304.139 0 .278.001.417.003h-.021c.116-.002.252-.003.389-.003 2.965 0 5.82.469 8.496 1.337l-.195-.055c1.305.424 2.438 1.036 3.433 1.814l-.024-.018c.775.546 1.298 1.404 1.386 2.387l.001.013c0 1.656-1.954 3.332-5.103 4.374-2.363.729-5.08 1.149-7.895 1.149-.17 0-.339-.002-.508-.005h.025zm0-9.84c-.106-.002-.232-.002-.358-.002-2.881 0-5.656.452-8.259 1.289l.191-.053c-2.698.941-3.908 2.228-3.908 3.087 0 .893 1.301 2.3 4.153 3.274 2.249.697 4.834 1.099 7.513 1.099.235 0 .469-.003.702-.009l-.034.001c.146.003.318.005.49.005 2.684 0 5.274-.4 7.715-1.143l-.187.049c2.96-.984 4.32-2.391 4.32-3.28-.102-.638-.462-1.176-.966-1.515l-.008-.005c-.866-.674-1.876-1.217-2.97-1.574l-.07-.02c-2.368-.766-5.093-1.208-7.92-1.208-.142 0-.283.001-.424.003h.021z"></path> <path d="m8.023 23.986c-.016 0-.035.001-.053.001-.453 0-.878-.119-1.245-.327l.013.007c-1.378-.8-1.858-3.092-1.28-6.141.697-3.128 1.827-5.894 3.344-8.4l-.069.124c1.499-2.655 3.31-4.926 5.425-6.872l.02-.018c.923-.844 2.003-1.537 3.187-2.028l.073-.027c.407-.196.885-.31 1.39-.31.501 0 .976.113 1.4.314l-.02-.008c1.435.826 1.911 3.36 1.238 6.606-.72 2.967-1.818 5.58-3.262 7.959l.07-.123c-1.452 2.63-3.209 4.882-5.266 6.819l-.014.013c-.958.877-2.083 1.59-3.321 2.082l-.074.026c-.46.181-.992.292-1.549.305h-.006zm1.205-14.447.499.288c-1.381 2.28-2.465 4.926-3.106 7.74l-.034.18c-.533 2.809-.019 4.498.72 4.926.191.102.417.161.657.161.02 0 .041 0 .061-.001h-.003c.955 0 2.458-.605 4.196-2.122 1.976-1.867 3.654-4.023 4.972-6.404l.068-.135c1.318-2.156 2.371-4.653 3.025-7.307l.038-.182c.629-3.058.086-4.93-.686-5.378-.238-.094-.514-.148-.802-.148-.364 0-.708.087-1.012.24l.013-.006c-1.118.465-2.078 1.086-2.907 1.846l.007-.006c-2.041 1.881-3.772 4.057-5.136 6.468l-.069.132z"></path> <path d="m18.96 24c-1.306 0-2.96-.787-4.69-2.276-2.175-1.983-4.017-4.282-5.464-6.834l-.072-.137c-1.43-2.349-2.551-5.075-3.215-7.975l-.036-.185c-.162-.709-.255-1.522-.255-2.357 0-.527.037-1.044.108-1.551l-.007.058c.085-.998.608-1.858 1.372-2.399l.01-.007c1.43-.83 3.865.024 6.342 2.228 2.022 1.914 3.748 4.113 5.118 6.54l.072.138c1.428 2.297 2.557 4.961 3.242 7.798l.038.186c.163.709.257 1.524.257 2.36 0 .577-.044 1.143-.13 1.696l.008-.062c-.103 1.022-.644 1.901-1.429 2.456l-.011.007c-.348.199-.764.316-1.207.316-.018 0-.036 0-.054-.001h.003zm-9.228-9.823c1.458 2.571 3.217 4.771 5.271 6.656l.02.018c2.166 1.863 3.884 2.266 4.628 1.834.773-.446 1.339-2.276.754-5.233-.702-2.89-1.787-5.434-3.219-7.741l.065.112c-1.379-2.456-3.027-4.562-4.948-6.384l-.012-.011c-2.334-2.074-4.225-2.54-4.998-2.094-.473.385-.784.952-.825 1.593v.007c-.055.39-.086.84-.086 1.298 0 .757.086 1.493.248 2.201l-.013-.066c.673 2.952 1.747 5.559 3.182 7.924l-.066-.117z"></path> </svg> </div> <div class="tech-pill tech-astro" title="Tailwind" data-astro-cid-wez336wh> <!--?xml version="1.0" encoding="utf-8"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current" data-astro-cid-wez336wh="true" width="800px" height="800px" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M7.50006 2.5C6.47409 2.5 5.59203 2.77691 4.89966 3.37037C4.21227 3.95956 3.76259 4.81729 3.51314 5.88638C3.45869 6.1197 3.57742 6.35885 3.79619 6.45654C4.01496 6.55423 4.27228 6.483 4.40967 6.28672C4.7263 5.8344 5.04244 5.56261 5.3462 5.42313C5.64038 5.28805 5.95748 5.26068 6.32069 5.35797C6.68723 5.45615 6.97097 5.74369 7.41643 6.22816L7.43082 6.24382C7.76661 6.60905 8.17623 7.0546 8.73649 7.40028C9.31785 7.75898 10.0413 7.99999 11.0001 7.99999C12.026 7.99999 12.9081 7.72307 13.6005 7.12962C14.2878 6.54043 14.7375 5.6827 14.987 4.61361C15.0414 4.38029 14.9227 4.14114 14.7039 4.04345C14.4852 3.94576 14.2278 4.01698 14.0904 4.21326C13.7738 4.66559 13.4577 4.93737 13.1539 5.07686C12.8597 5.21194 12.5426 5.23931 12.1794 5.14202C11.8129 5.04384 11.5291 4.7563 11.0837 4.27182L11.0693 4.25616C10.7335 3.89093 10.3239 3.44538 9.76362 3.09971C9.18227 2.74101 8.45883 2.5 7.50006 2.5Z"></path> <path d="M4.00006 6.99999C2.97409 6.99999 2.09203 7.2769 1.39966 7.87036C0.712271 8.45955 0.262592 9.31727 0.0131365 10.3864C-0.0413057 10.6197 0.0774162 10.8588 0.296186 10.9565C0.514956 11.0542 0.772276 10.983 0.909673 10.7867C1.2263 10.3344 1.54244 10.0626 1.8462 9.92312C2.14038 9.78804 2.45747 9.76067 2.82069 9.85796C3.18723 9.95614 3.47097 10.2437 3.91643 10.7282L3.93082 10.7438C4.2666 11.109 4.67624 11.5546 5.23649 11.9003C5.81785 12.259 6.54128 12.5 7.50006 12.5C8.52602 12.5 9.40808 12.2231 10.1005 11.6296C10.7878 11.0404 11.2375 10.1827 11.487 9.1136C11.5414 8.88027 11.4227 8.64113 11.2039 8.54343C10.9852 8.44574 10.7278 8.51697 10.5904 8.71325C10.2738 9.16558 9.95768 9.43736 9.65391 9.57684C9.35974 9.71192 9.04264 9.7393 8.67942 9.64201C8.31289 9.54383 8.02915 9.25628 7.58369 8.77181L7.56929 8.75615C7.23351 8.39092 6.82388 7.94537 6.26362 7.59969C5.68227 7.241 4.95883 6.99999 4.00006 6.99999Z"></path> </svg> </div> <div class="tech-pill tech-git" title="Git" data-astro-cid-wez336wh> <!--?xml version="1.0" encoding="utf-8"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current" data-astro-cid-wez336wh="true" width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> <title>git</title> <rect width="24" height="24" fill="none"></rect> <path d="M2.6,10.59,8.38,4.8l1.69,1.7A2,2,0,0,0,11,8.73v5.54A2,2,0,0,0,10,16a2,2,0,0,0,4,0,2,2,0,0,0-1-1.73V9.41l2.07,2.09A1.17,1.17,0,0,0,15,12a2,2,0,1,0,2-2,1.17,1.17,0,0,0-.5.07L13.93,7.5a2,2,0,0,0-1.15-2.34,2.1,2.1,0,0,0-1.28-.09L9.8,3.38l.79-.78a2,2,0,0,1,2.82,0l8,8a2,2,0,0,1,0,2.82l-8,8a2,2,0,0,1-2.82,0l-8-8A2,2,0,0,1,2.6,10.59Z"></path> </svg> </div> <div class="tech-pill tech-github" title="GitHub" data-astro-cid-wez336wh> <!--?xml version="1.0" encoding="UTF-8" standalone="no"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current" data-astro-cid-wez336wh="true" xmlns="http://www.w3.org/2000/svg" width="800px" height="800px" viewBox="0 0 24 24" fill="none"> <path d="M18.6713 2.62664C18.5628 2.36483 18.3534 2.16452 18.0959 2.07627L18.094 2.07564L18.0922 2.07501L18.0884 2.07374L18.0805 2.07114L18.0636 2.06583C18.0518 2.06223 18.039 2.05856 18.0252 2.05487C17.9976 2.04749 17.966 2.04007 17.9305 2.03319C17.8593 2.01941 17.7728 2.00787 17.6708 2.00279C17.466 1.99259 17.2037 2.00858 16.8817 2.08054C16.3447 2.20053 15.6476 2.47464 14.7724 3.03631C14.7152 3.07302 14.6572 3.11096 14.5985 3.15016C14.5397 3.13561 14.4809 3.12155 14.422 3.108C12.8261 2.74083 11.1742 2.74083 9.57825 3.108C9.51933 3.12156 9.46049 3.13561 9.40173 3.15017C9.34298 3.11096 9.28499 3.07302 9.22775 3.03631C8.35163 2.47435 7.65291 2.20029 7.11455 2.08039C6.79179 2.00852 6.52891 1.99262 6.324 2.00278C6.22186 2.00784 6.13536 2.01931 6.06428 2.03299C6.0288 2.03982 5.99732 2.04717 5.96983 2.05447C5.95609 2.05812 5.94336 2.06176 5.93163 2.06531L5.91481 2.07056L5.90698 2.07311L5.9032 2.07437L5.90135 2.07499L5.89952 2.07561C5.63979 2.16397 5.42877 2.36623 5.32049 2.63061C4.91716 3.6154 4.8101 4.70134 5.00435 5.74306C5.01379 5.79367 5.02394 5.84418 5.0348 5.89458C4.99316 5.95373 4.9527 6.01368 4.91343 6.07439C4.30771 7.01089 3.98553 8.12791 4.00063 9.27493C4.00208 11.7315 4.71965 13.4139 5.9332 14.4965C6.62014 15.1093 7.41743 15.4844 8.21873 15.7208C8.31042 15.7479 8.40217 15.7731 8.49381 15.7967C8.48043 15.8432 8.46796 15.8901 8.45641 15.9373C8.40789 16.1357 8.37572 16.3394 8.36083 16.5461C8.35948 16.5648 8.35863 16.5835 8.35829 16.6022L8.32436 18.421L8.32417 18.4407C8.32417 18.4464 8.32417 18.4521 8.32417 18.4577C8.26262 18.473 8.20005 18.4843 8.13682 18.4916C7.942 18.5141 7.74467 18.4977 7.5561 18.4434C7.36752 18.3891 7.19127 18.2979 7.03752 18.1749C6.88377 18.0519 6.75553 17.8994 6.66031 17.7261L6.6505 17.7087C6.38836 17.2535 6.02627 16.8639 5.59142 16.5695C5.15656 16.275 4.6604 16.0836 4.14047 16.0099C3.59365 15.9324 3.08753 16.3128 3.01002 16.8597C2.93251 17.4065 3.31296 17.9126 3.85978 17.9901C4.07816 18.0211 4.28688 18.1015 4.47012 18.2256C4.65121 18.3482 4.80277 18.5103 4.9134 18.7C5.1346 19.0992 5.43165 19.4514 5.78801 19.7365C6.14753 20.0242 6.56032 20.2379 7.00272 20.3653C7.43348 20.4893 7.88392 20.5291 8.32949 20.4825C8.33039 20.7224 8.33103 20.9065 8.33103 21C8.33103 21.5523 8.75521 22 9.27847 22H14.7558C15.279 22 15.7032 21.5523 15.7032 21V17.2095C15.729 16.7802 15.685 16.3499 15.5738 15.9373C15.5585 15.8805 15.5419 15.824 15.5241 15.7679C15.5838 15.753 15.6435 15.7373 15.7032 15.7208C16.5277 15.4937 17.3513 15.1224 18.0588 14.4983C19.2791 13.4217 19.9982 11.7379 19.9996 9.27493C20.0147 8.12791 19.6925 7.01089 19.0868 6.07439C19.0475 6.01358 19.007 5.95354 18.9652 5.89429C18.976 5.84399 18.9861 5.79358 18.9955 5.74306C19.1893 4.69934 19.0795 3.61142 18.6713 2.62664Z"></path> </svg> </div> <div class="tech-pill tech-sql" title="SQL" data-astro-cid-wez336wh> <!--?xml version="1.0" encoding="utf-8"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current" data-astro-cid-wez336wh="true" width="800px" height="800px" viewBox="0 0 32 32" id="icon" xmlns="http://www.w3.org/2000/svg"><defs><style>.cls-1{fill:none;}</style></defs><title>SQL</title><polygon points="24 21 24 9 22 9 22 23 30 23 30 21 24 21"></polygon><path d="M18,9H14a2,2,0,0,0-2,2V21a2,2,0,0,0,2,2h1v2a2,2,0,0,0,2,2h2V25H17V23h1a2,2,0,0,0,2-2V11A2,2,0,0,0,18,9ZM14,21V11h4V21Z"></path><path d="M8,23H2V21H8V17H4a2,2,0,0,1-2-2V11A2,2,0,0,1,4,9h6v2H4v4H8a2,2,0,0,1,2,2v4A2,2,0,0,1,8,23Z"></path><rect id="_Transparent_Rectangle_" data-name="<Transparent Rectangle>" class="cls-1" width="32" height="32"></rect></svg> </div> </div> </div> </article> </div> </div> <!-- Modal (oculto inicialmente) --> <div id="modal" class="hidden" aria-hidden="true" data-astro-cid-wez336wh> <div id="modalDialog" onclick="event.stopPropagation()" data-astro-cid-wez336wh> <img id="modalImg" src="" alt="" data-astro-cid-wez336wh> <p id="modalDesc" class="modal-caption" data-astro-cid-wez336wh></p> <button id="prevBtn" class="nav-btn nav-left" aria-label="Anterior" type="button" data-astro-cid-wez336wh> <svg class="w-6 h-6 fill-current text-[var(--toggle-sun)]" viewBox="0 0 24 24" aria-hidden="true" data-astro-cid-wez336wh><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" data-astro-cid-wez336wh></path></svg> </button> <button id="nextBtn" class="nav-btn nav-right" aria-label="Siguiente" type="button" data-astro-cid-wez336wh> <svg class="w-6 h-6 fill-current text-[var(--toggle-sun)]" viewBox="0 0 24 24" aria-hidden="true" data-astro-cid-wez336wh><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" data-astro-cid-wez336wh></path></svg> </button> </div> </div> <!-- Datos serializados (Viacha y Domposer; Domposer usa Trabajo1..Trabajo5) --> <script type="application/json" id="projects-data">
+    {
+      "projects": [
+        {
+          "title": "Viacha (Municipal)",
+          "images": [
+            { "img": "/assets/viacha1.png", "desc": "inicio" },
+            { "img": "/assets/viacha2.png", "desc": "descripcion" },
+            { "img": "/assets/viacha3.png", "desc": "servicios" },
+            { "img": "/assets/viacha4.png", "desc": "departamentos" },
+            { "img": "/assets/viacha5.png", "desc": "Sección de contacto y mapa." },
+            { "img": "/assets/viacha6.png", "desc": "Noticias" },
+            { "img": "/assets/viacha7.png", "desc": "noticias" },
+            { "img": "/assets/viacha8.png", "desc": "noticias" },
+            { "img": "/assets/viacha9.png", "desc": "Fotos" },
+            { "img": "/assets/viacha10.png", "desc": "eventos" }
+          ],
+          "live": "https://viacha.gob.bo/"
+        },
+        {
+          "title": "Sistema de control, venta y gestion de un centro medico",
+          "images": [
+            { "img": "/assets/Trabajo1.png", "desc": "Interfaz" },
+            { "img": "/assets/Trabajo2.png", "desc": "ventas" },
+            { "img": "/assets/Trabajo3.png", "desc": "busqueda" },
+            { "img": "/assets/Trabajo4.png", "desc": "añadir" },
+            { "img": "/assets/Trabajo5.png", "desc": "consultas" }
+          ],
+          "live": null
+        }
+      ]
+    }
+  </script> <!-- Script modal + synchronizer --> <script client:load>
+    // parse projects
+    const raw = document.getElementById('projects-data')?.textContent || '{"projects": []}';
+    let projects = [];
+    try { projects = JSON.parse(raw).projects || []; } catch(e){ console.warn('projects-data parse error', e); }
+
+    // sync thumbnails: set each .proj-img src to the first image in its project (if exists)
+    (function syncThumbnails() {
+      const thumbEls = Array.from(document.querySelectorAll('.proj-img'));
+      thumbEls.forEach((imgEl) => {
+        const idxAttr = imgEl.dataset.projectIndex;
+        const idx = typeof idxAttr !== 'undefined' ? Number(idxAttr) : NaN;
+        if (Number.isNaN(idx) || !projects[idx] || !projects[idx].images || !projects[idx].images[0]) return;
+        const first = projects[idx].images[0].img;
+        // only set if different (reduces flicker)
+        if (imgEl.src === first || imgEl.getAttribute('src') === first) {
+          // already set
+        } else {
+          imgEl.src = first;
+        }
+        // attach click listener to open modal for this project
+        imgEl.removeEventListener('click', imgEl._openHandler);
+        imgEl._openHandler = (e) => { e.stopPropagation(); openModal(idx); };
+        imgEl.addEventListener('click', imgEl._openHandler);
+        // detect load error
+        imgEl.onerror = () => {
+          console.warn(`Thumbnail load failed for project ${idx} — tried: ${first}`);
+          imgEl.classList.add('img-missing');
+        };
+      });
+    })();
+
+    let idx = 0;    // project index
+    let slide = 0;  // slide index within project
+    let isOpen = false;
+
+    const modal = document.getElementById("modal");
+    const dialog = document.getElementById("modalDialog");
+    const modalImg = document.getElementById("modalImg");
+    const modalDesc = document.getElementById("modalDesc");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    function renderSlide() {
+      const s = projects[idx]?.images?.[slide];
+      if (!s) {
+        modalImg.src = '';
+        modalDesc.innerText = '';
+        return;
+      }
+      modalImg.src = s.img;
+      modalImg.alt = projects[idx]?.title || `Proyecto ${idx + 1}`;
+      modalDesc.innerText = s.desc || '';
+      // detect modal image load errors
+      modalImg.onerror = () => {
+        console.warn(`Modal image load failed for project ${idx} slide ${slide} — tried: ${s.img}`);
+        modalImg.classList.add('img-missing');
+      };
+    }
+
+    function openModal(i) {
+      idx = Number(i) || 0;
+      slide = 0;
+      if (!projects[idx]) {
+        console.warn('openModal: project not found for index', idx);
+        return;
+      }
+      renderSlide();
+      dialog.classList.remove('animate-modal-out');
+      void dialog.offsetWidth; // reflow
+      modal.classList.remove('hidden');
+      dialog.classList.add('animate-modal-in');
+      if (!isOpen) window.addEventListener('keydown', keyHandler);
+      isOpen = true;
+    }
+
+    function closeModal() {
+      if (!isOpen) {
+        modal.classList.add('hidden');
+        return;
+      }
+      dialog.classList.remove('animate-modal-in');
+      const onAnimEnd = () => {
+        modal.classList.add('hidden');
+        dialog.classList.remove('animate-modal-out');
+        window.removeEventListener('keydown', keyHandler);
+        isOpen = false;
+      };
+      dialog.addEventListener('animationend', onAnimEnd, { once: true });
+      dialog.classList.add('animate-modal-out');
+    }
+
+    function showPrev() {
+      const imgs = projects[idx]?.images;
+      if (!imgs || imgs.length === 0) return;
+      slide = (slide - 1 + imgs.length) % imgs.length;
+      renderSlide();
+    }
+
+    function showNext() {
+      const imgs = projects[idx]?.images;
+      if (!imgs || imgs.length === 0) return;
+      slide = (slide + 1) % imgs.length;
+      renderSlide();
+    }
+
+    function keyHandler(ev) {
+      if (!isOpen) return;
+      if (ev.key === "Escape") closeModal();
+      if (ev.key === "ArrowLeft") showPrev();
+      if (ev.key === "ArrowRight") showNext();
+    }
+
+    // idempotent listeners
+    prevBtn?.addEventListener('click', (e) => { e.stopPropagation(); showPrev(); });
+    nextBtn?.addEventListener('click', (e) => { e.stopPropagation(); showNext(); });
+
+    // overlay click closes only if clicked on overlay root
+    modal?.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+    // expose for compatibility (if you still want to call from inline)
+    window.openModal = openModal;
+    window.closeModal = closeModal;
+    window.showPrev = showPrev;
+    window.showNext = showNext;
+  </script> </section> <section id="habilidades" class="py-16 px-4 md:px-50"> <h2 class="text-3xl font-bold text-center text-glow mb-9">Habilidades &amp; Aprendizaje</h2> <!-- Contenedor centrado con ancho máximo para evitar que las tarjetas se estiren --> <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:justify-center md:items-start gap-6"> <!-- Habilidades (tarjeta - ancho fijo para no estirarse) --> <div class="flex-none w-[720px] max-w-full border-2 rounded-xl p-4 box-border"> <h3 class="text-2xl font-semibold mb-4 text-center">Habilidades</h3> <div class="w-full grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 justify-items-center"> <div key="0" class="tech-pill tech-react box-border flex flex-col items-center justify-start rounded-lg border-4 border-[var(--card-border)] p-4 w-[160px] h-[140px] transition-transform duration-150 hover:-translate-y-1" title="React" aria-label="React"> <!-- ICON: tamaño controlado aquí --> <!--?xml version="1.0" encoding="utf-8"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current w-[56px] h-[56px] md:w-[64px] md:h-[64px]" width="800px" height="800px" viewBox="0 -1.5 27 27" xmlns="http://www.w3.org/2000/svg"> <path d="m15.902 11.974c0 1.331-1.079 2.41-2.41 2.41s-2.41-1.079-2.41-2.41 1.079-2.41 2.41-2.41 2.41 1.079 2.41 2.41z"></path> <path d="m13.491 17.494c-.201.005-.438.008-.676.008-2.811 0-5.522-.425-8.073-1.214l.193.051c-1.351-.436-2.522-1.079-3.541-1.903l.021.016c-.789-.571-1.32-1.455-1.41-2.467l-.001-.013c0-1.594 1.747-3.154 4.681-4.172 2.512-.827 5.403-1.304 8.405-1.304.139 0 .278.001.417.003h-.021c.116-.002.252-.003.389-.003 2.965 0 5.82.469 8.496 1.337l-.195-.055c1.305.424 2.438 1.036 3.433 1.814l-.024-.018c.775.546 1.298 1.404 1.386 2.387l.001.013c0 1.656-1.954 3.332-5.103 4.374-2.363.729-5.08 1.149-7.895 1.149-.17 0-.339-.002-.508-.005h.025zm0-9.84c-.106-.002-.232-.002-.358-.002-2.881 0-5.656.452-8.259 1.289l.191-.053c-2.698.941-3.908 2.228-3.908 3.087 0 .893 1.301 2.3 4.153 3.274 2.249.697 4.834 1.099 7.513 1.099.235 0 .469-.003.702-.009l-.034.001c.146.003.318.005.49.005 2.684 0 5.274-.4 7.715-1.143l-.187.049c2.96-.984 4.32-2.391 4.32-3.28-.102-.638-.462-1.176-.966-1.515l-.008-.005c-.866-.674-1.876-1.217-2.97-1.574l-.07-.02c-2.368-.766-5.093-1.208-7.92-1.208-.142 0-.283.001-.424.003h.021z"></path> <path d="m8.023 23.986c-.016 0-.035.001-.053.001-.453 0-.878-.119-1.245-.327l.013.007c-1.378-.8-1.858-3.092-1.28-6.141.697-3.128 1.827-5.894 3.344-8.4l-.069.124c1.499-2.655 3.31-4.926 5.425-6.872l.02-.018c.923-.844 2.003-1.537 3.187-2.028l.073-.027c.407-.196.885-.31 1.39-.31.501 0 .976.113 1.4.314l-.02-.008c1.435.826 1.911 3.36 1.238 6.606-.72 2.967-1.818 5.58-3.262 7.959l.07-.123c-1.452 2.63-3.209 4.882-5.266 6.819l-.014.013c-.958.877-2.083 1.59-3.321 2.082l-.074.026c-.46.181-.992.292-1.549.305h-.006zm1.205-14.447.499.288c-1.381 2.28-2.465 4.926-3.106 7.74l-.034.18c-.533 2.809-.019 4.498.72 4.926.191.102.417.161.657.161.02 0 .041 0 .061-.001h-.003c.955 0 2.458-.605 4.196-2.122 1.976-1.867 3.654-4.023 4.972-6.404l.068-.135c1.318-2.156 2.371-4.653 3.025-7.307l.038-.182c.629-3.058.086-4.93-.686-5.378-.238-.094-.514-.148-.802-.148-.364 0-.708.087-1.012.24l.013-.006c-1.118.465-2.078 1.086-2.907 1.846l.007-.006c-2.041 1.881-3.772 4.057-5.136 6.468l-.069.132z"></path> <path d="m18.96 24c-1.306 0-2.96-.787-4.69-2.276-2.175-1.983-4.017-4.282-5.464-6.834l-.072-.137c-1.43-2.349-2.551-5.075-3.215-7.975l-.036-.185c-.162-.709-.255-1.522-.255-2.357 0-.527.037-1.044.108-1.551l-.007.058c.085-.998.608-1.858 1.372-2.399l.01-.007c1.43-.83 3.865.024 6.342 2.228 2.022 1.914 3.748 4.113 5.118 6.54l.072.138c1.428 2.297 2.557 4.961 3.242 7.798l.038.186c.163.709.257 1.524.257 2.36 0 .577-.044 1.143-.13 1.696l.008-.062c-.103 1.022-.644 1.901-1.429 2.456l-.011.007c-.348.199-.764.316-1.207.316-.018 0-.036 0-.054-.001h.003zm-9.228-9.823c1.458 2.571 3.217 4.771 5.271 6.656l.02.018c2.166 1.863 3.884 2.266 4.628 1.834.773-.446 1.339-2.276.754-5.233-.702-2.89-1.787-5.434-3.219-7.741l.065.112c-1.379-2.456-3.027-4.562-4.948-6.384l-.012-.011c-2.334-2.074-4.225-2.54-4.998-2.094-.473.385-.784.952-.825 1.593v.007c-.055.39-.086.84-.086 1.298 0 .757.086 1.493.248 2.201l-.013-.066c.673 2.952 1.747 5.559 3.182 7.924l-.066-.117z"></path> </svg> <!-- etiqueta debajo del icono --> <div class="tech-label mt-3 text-sm font-semibold text-center sr-only md:not-sr-only">React</div> </div><div key="1" class="tech-pill tech-astro box-border flex flex-col items-center justify-start rounded-lg border-4 border-[var(--card-border)] p-4 w-[160px] h-[140px] transition-transform duration-150 hover:-translate-y-1" title="Astro" aria-label="Astro"> <!-- ICON: tamaño controlado aquí --> <!--?xml version="1.0" encoding="utf-8"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current w-[56px] h-[56px] md:w-[64px] md:h-[64px]" width="800px" height="800px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><title>file_type_astro</title><path d="M5.9,18.847a7.507,7.507,0,0,0-.572,2.624,3.265,3.265,0,0,0,.551,1.553,7.427,7.427,0,0,0,2.093,1.681L13.1,28.119A7.332,7.332,0,0,0,15.2,29.287a3.239,3.239,0,0,0,1.5,0,7.381,7.381,0,0,0,2.117-1.16L24,24.711a7.512,7.512,0,0,0,2.117-1.688,3.241,3.241,0,0,0,.55-1.563,7.515,7.515,0,0,0-.587-2.643L21.547,4.551a3.973,3.973,0,0,0-.54-1.3,1.733,1.733,0,0,0-.7-.51,3.972,3.972,0,0,0-1.4-.122H13.005a3.932,3.932,0,0,0-1.4.125,1.713,1.713,0,0,0-.7.512,3.94,3.94,0,0,0-.535,1.3L5.9,18.848Zm13.24-13.2a3.329,3.329,0,0,1,.441,1.093l3.892,12.784a16.168,16.168,0,0,0-4.653-1.573L16.291,9.391a.331.331,0,0,0-.513-.169.323.323,0,0,0-.119.169l-2.5,8.557a16.14,16.14,0,0,0-4.674,1.579L12.393,6.743a3.281,3.281,0,0,1,.442-1.094,1.458,1.458,0,0,1,.582-.43,3.31,3.31,0,0,1,1.175-.1h2.793a3.314,3.314,0,0,1,1.176.1,1.454,1.454,0,0,1,.583.432ZM16.127,21.06a5.551,5.551,0,0,0,3.4-.923,2.8,2.8,0,0,1-.207,2.182A3.938,3.938,0,0,1,17.773,23.8c-.674.428-1.254.8-1.254,1.787a2.079,2.079,0,0,0,.209.914,2.49,2.49,0,0,1-1.535-2.3v-.061c0-.683,0-1.524-.962-1.524a1.028,1.028,0,0,0-.391.077,1.021,1.021,0,0,0-.552.551,1.03,1.03,0,0,0-.079.391,3.769,3.769,0,0,1-.988-2.644,4.206,4.206,0,0,1,.175-1.248c.4.757,1.92,1.32,3.731,1.32Z"></path></svg> <!-- etiqueta debajo del icono --> <div class="tech-label mt-3 text-sm font-semibold text-center sr-only md:not-sr-only">Astro</div> </div><div key="2" class="tech-pill tech-tailwind box-border flex flex-col items-center justify-start rounded-lg border-4 border-[var(--card-border)] p-4 w-[160px] h-[140px] transition-transform duration-150 hover:-translate-y-1" title="Tailwind" aria-label="Tailwind"> <!-- ICON: tamaño controlado aquí --> <!--?xml version="1.0" encoding="utf-8"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current w-[56px] h-[56px] md:w-[64px] md:h-[64px]" width="800px" height="800px" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M7.50006 2.5C6.47409 2.5 5.59203 2.77691 4.89966 3.37037C4.21227 3.95956 3.76259 4.81729 3.51314 5.88638C3.45869 6.1197 3.57742 6.35885 3.79619 6.45654C4.01496 6.55423 4.27228 6.483 4.40967 6.28672C4.7263 5.8344 5.04244 5.56261 5.3462 5.42313C5.64038 5.28805 5.95748 5.26068 6.32069 5.35797C6.68723 5.45615 6.97097 5.74369 7.41643 6.22816L7.43082 6.24382C7.76661 6.60905 8.17623 7.0546 8.73649 7.40028C9.31785 7.75898 10.0413 7.99999 11.0001 7.99999C12.026 7.99999 12.9081 7.72307 13.6005 7.12962C14.2878 6.54043 14.7375 5.6827 14.987 4.61361C15.0414 4.38029 14.9227 4.14114 14.7039 4.04345C14.4852 3.94576 14.2278 4.01698 14.0904 4.21326C13.7738 4.66559 13.4577 4.93737 13.1539 5.07686C12.8597 5.21194 12.5426 5.23931 12.1794 5.14202C11.8129 5.04384 11.5291 4.7563 11.0837 4.27182L11.0693 4.25616C10.7335 3.89093 10.3239 3.44538 9.76362 3.09971C9.18227 2.74101 8.45883 2.5 7.50006 2.5Z"></path> <path d="M4.00006 6.99999C2.97409 6.99999 2.09203 7.2769 1.39966 7.87036C0.712271 8.45955 0.262592 9.31727 0.0131365 10.3864C-0.0413057 10.6197 0.0774162 10.8588 0.296186 10.9565C0.514956 11.0542 0.772276 10.983 0.909673 10.7867C1.2263 10.3344 1.54244 10.0626 1.8462 9.92312C2.14038 9.78804 2.45747 9.76067 2.82069 9.85796C3.18723 9.95614 3.47097 10.2437 3.91643 10.7282L3.93082 10.7438C4.2666 11.109 4.67624 11.5546 5.23649 11.9003C5.81785 12.259 6.54128 12.5 7.50006 12.5C8.52602 12.5 9.40808 12.2231 10.1005 11.6296C10.7878 11.0404 11.2375 10.1827 11.487 9.1136C11.5414 8.88027 11.4227 8.64113 11.2039 8.54343C10.9852 8.44574 10.7278 8.51697 10.5904 8.71325C10.2738 9.16558 9.95768 9.43736 9.65391 9.57684C9.35974 9.71192 9.04264 9.7393 8.67942 9.64201C8.31289 9.54383 8.02915 9.25628 7.58369 8.77181L7.56929 8.75615C7.23351 8.39092 6.82388 7.94537 6.26362 7.59969C5.68227 7.241 4.95883 6.99999 4.00006 6.99999Z"></path> </svg> <!-- etiqueta debajo del icono --> <div class="tech-label mt-3 text-sm font-semibold text-center sr-only md:not-sr-only">Tailwind</div> </div><div key="3" class="tech-pill tech-js box-border flex flex-col items-center justify-start rounded-lg border-4 border-[var(--card-border)] p-4 w-[160px] h-[140px] transition-transform duration-150 hover:-translate-y-1" title="JavaScript" aria-label="JavaScript"> <!-- ICON: tamaño controlado aquí --> <!--?xml version="1.0" encoding="utf-8"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current w-[56px] h-[56px] md:w-[64px] md:h-[64px]" width="800px" height="800px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <path d="M9.633 7.968h3.751v10.514c0 4.738-2.271 6.392-5.899 6.392-0.888 0-2.024-0.148-2.764-0.395l0.42-3.036c0.518 0.173 1.185 0.296 1.925 0.296 1.58 0 2.567-0.716 2.567-3.282v-10.489zM16.641 20.753c0.987 0.518 2.567 1.037 4.171 1.037 1.728 0 2.641-0.716 2.641-1.826 0-1.012-0.79-1.629-2.789-2.32-2.764-0.987-4.59-2.517-4.59-4.961 0-2.838 2.394-4.985 6.293-4.985 1.9 0 3.258 0.37 4.245 0.839l-0.839 3.011c-0.642-0.321-1.851-0.79-3.455-0.79-1.629 0-2.419 0.765-2.419 1.604 0 1.061 0.913 1.53 3.085 2.369 2.937 1.086 4.294 2.616 4.294 4.985 0 2.789-2.122 5.158-6.688 5.158-1.9 0-3.776-0.518-4.714-1.037l0.765-3.085z"></path> </svg> <!-- etiqueta debajo del icono --> <div class="tech-label mt-3 text-sm font-semibold text-center sr-only md:not-sr-only">JavaScript</div> </div><div key="4" class="tech-pill tech-html box-border flex flex-col items-center justify-start rounded-lg border-4 border-[var(--card-border)] p-4 w-[160px] h-[140px] transition-transform duration-150 hover:-translate-y-1" title="HTML" aria-label="HTML"> <!-- ICON: tamaño controlado aquí --> <!--?xml version="1.0" encoding="iso-8859-1"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current w-[56px] h-[56px] md:w-[64px] md:h-[64px]" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800px" height="800px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"> <g id="c133de6af664cd4f011a55de6b000d0b"> <path display="inline" d="M108.669,0.501h23.032v22.756h21.069V0.501h23.034V69.41h-23.032V46.334h-21.069V69.41h-23.032V0.501
+		H108.669z M206.091,23.353h-20.275V0.501h63.594v22.852h-20.285V69.41h-23.032V23.353H206.091z M259.502,0.501h24.02l14.771,24.213
+		l14.759-24.213h24.023V69.41h-22.938V35.256l-15.845,24.5h-0.395l-15.856-24.5V69.41h-22.539V0.501z M348.54,0.501h23.038v46.133
+		h32.391V69.41H348.54V0.501z M74.987,100.926l32.946,369.533l147.844,41.04L404.031,470.4l32.981-369.475H74.987z M368.289,188.62
+		l-2.063,22.977l-0.906,10.188h-0.149H256h-0.158h-63.956l4.142,46.407h59.814H256h92.98h12.214l-1.106,12.172l-10.65,119.32
+		l-0.682,7.652L256,433.045v0.008l-0.208,0.059l-92.839-25.774l-6.351-71.161h20.97h24.527l3.227,36.146l50.474,13.632l0.042-0.013
+		v-0.004l50.551-13.64l5.257-58.781H256h-0.158H154.578L143.439,188.62l-1.085-12.157h113.488H256h113.374L368.289,188.62z"></path> </g> </svg> <!-- etiqueta debajo del icono --> <div class="tech-label mt-3 text-sm font-semibold text-center sr-only md:not-sr-only">HTML</div> </div><div key="5" class="tech-pill tech-css box-border flex flex-col items-center justify-start rounded-lg border-4 border-[var(--card-border)] p-4 w-[160px] h-[140px] transition-transform duration-150 hover:-translate-y-1" title="CSS" aria-label="CSS"> <!-- ICON: tamaño controlado aquí --> <!--?xml version="1.0" encoding="iso-8859-1"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current w-[56px] h-[56px] md:w-[64px] md:h-[64px]" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800px" height="800px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"> <g id="c133de6af664cd4f011a55de6b001a2b"> <path display="inline" d="M204.064,46.682v22.018h-56.302V0.501h56.302v24.13h-32.172v22.051H204.064z M261.941,24.631h22.492
+		V0.501h-56.308c0,0,0,12.112,0,24.13c7.533,7.533,11.461,11.139,22.356,22.034c-6.369,0-22.356,0.022-22.356,0.021v22.014h56.308
+		V46.682L261.941,24.631z M341.746,24.631h22.49V0.501H307.93c0,0,0,12.112,0,24.13c7.531,7.533,11.461,11.139,22.355,22.034
+		c-6.365,0-22.355,0.022-22.355,0.021v22.014h56.307V46.682L341.746,24.631z M438.395,101.112l-34.203,370.486l-148.193,39.9
+		l-148.196-39.9L73.605,101.112H438.395z M369.477,176.444H255.865h-115.62l5.529,44.739h110.091h6.184l-6.184,2.574
+		l-106.067,44.177l3.518,43.73l102.549,0.333l54.963,0.175l-3.521,58.311l-51.442,14.484v-0.046l-0.422,0.116l-49.684-12.542
+		l-3.015-36.195h-0.164h-46.085h-0.162l6.032,69.876l93.5,27.649v-0.05l0.168,0.05l93-27.146L361.1,267.935H255.865h-0.26
+		l0.26-0.112l109.086-46.639L369.477,176.444z"></path> </g> </svg> <!-- etiqueta debajo del icono --> <div class="tech-label mt-3 text-sm font-semibold text-center sr-only md:not-sr-only">CSS</div> </div><div key="6" class="tech-pill tech-python box-border flex flex-col items-center justify-start rounded-lg border-4 border-[var(--card-border)] p-4 w-[160px] h-[140px] transition-transform duration-150 hover:-translate-y-1" title="Python" aria-label="Python"> <!-- ICON: tamaño controlado aquí --> <!--?xml version="1.0" encoding="iso-8859-1"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current w-[56px] h-[56px] md:w-[64px] md:h-[64px]" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800px" height="800px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"> <g id="5151e0c8492e5103c096af88a51ec286"> <path display="inline" d="M194.734,246.879h121.768c33.9,0,60.956-27.908,60.956-61.95V68.846c0-33.035-27.87-57.855-60.956-63.371
+		c-20.943-3.484-42.673-5.069-63.51-4.971c-20.845,0.097-40.74,1.874-58.258,4.971c-51.586,9.117-60.952,28.191-60.952,63.371
+		v46.463H255.69v15.486H133.782h-45.75c-35.434,0-66.459,21.295-76.158,61.808c-11.192,46.435-11.694,75.409,0,123.898
+		c8.666,36.088,29.359,61.807,64.79,61.807h41.917v-55.699C118.581,282.37,153.39,246.879,194.734,246.879z M187.063,84.333
+		c-12.636,0-22.877-10.355-22.877-23.161c0-12.849,10.241-23.3,22.877-23.3c12.594,0,22.873,10.451,22.873,23.3
+		C209.936,73.979,199.658,84.333,187.063,84.333z M499.37,192.603c-8.761-35.27-25.484-61.808-60.96-61.808h-45.75v54.134
+		c0,41.972-35.582,77.292-76.158,77.292H194.734c-33.349,0-60.952,28.547-60.952,61.954v116.079
+		c0,33.037,28.726,52.476,60.952,61.943c38.589,11.353,75.59,13.409,121.768,0c30.688-8.876,60.956-26.764,60.956-61.943v-46.461
+		H255.69v-15.486h121.768h60.952c35.431,0,48.638-24.715,60.96-61.807C512.092,278.314,511.549,241.589,499.37,192.603z
+		 M324.178,424.766c12.64,0,22.873,10.356,22.873,23.156c0,12.85-10.233,23.305-22.873,23.305
+		c-12.595,0-22.877-10.455-22.877-23.305C301.301,435.122,311.583,424.766,324.178,424.766z"></path> </g> </svg> <!-- etiqueta debajo del icono --> <div class="tech-label mt-3 text-sm font-semibold text-center sr-only md:not-sr-only">Python</div> </div><div key="7" class="tech-pill tech-csharp box-border flex flex-col items-center justify-start rounded-lg border-4 border-[var(--card-border)] p-4 w-[160px] h-[140px] transition-transform duration-150 hover:-translate-y-1" title="C#" aria-label="C#"> <!-- ICON: tamaño controlado aquí --> <!--?xml version="1.0" encoding="iso-8859-1"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current w-[56px] h-[56px] md:w-[64px] md:h-[64px]" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800px" height="800px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"> <g id="5151e0c8492e5103c096af88a51e54a6"> <path display="inline" d="M233.274,286.089l89.802,27.145c-6.035,25.188-15.535,46.223-28.5,63.107
+		c-12.975,16.894-29.071,29.638-48.297,38.233c-19.229,8.596-43.697,12.894-73.412,12.894c-36.038,0-65.482-5.238-88.33-15.711
+		c-22.852-10.477-42.563-28.896-59.155-55.271C8.794,330.114,0.5,296.354,0.5,255.208c0-54.855,14.594-97.016,43.769-126.479
+		c29.18-29.461,70.464-44.197,123.855-44.197c41.776,0,74.614,8.451,98.51,25.336c23.91,16.892,41.659,42.834,53.273,77.816
+		l-90.481,20.131c-3.164-10.098-6.485-17.492-9.95-22.168c-5.733-7.839-12.745-13.871-21.043-18.095
+		c-8.294-4.22-17.564-6.337-27.82-6.337c-23.23,0-41.024,9.343-53.391,28.021c-9.342,13.861-14.018,35.626-14.018,65.294
+		c0,36.756,5.576,61.948,16.732,75.584c11.16,13.627,26.848,20.439,47.059,20.439c19.599,0,34.413-5.503,44.449-16.516
+		C221.474,323.04,228.751,307.046,233.274,286.089z M485.345,239.259l-6.854,34.292H511.5v37.262h-40.452l-9.5,47.522h-38.41
+		l9.527-47.522h-29.769l-9.595,47.522h-38.14l9.527-47.522h-18.572v-37.262h26.047l6.876-34.292h-32.923v-37.262h40.398
+		l9.688-48.332h38.409l-9.752,48.332h29.625l9.694-48.332h38.273l-9.657,48.332H511.5v37.262H485.345z M447.017,239.259h-29.68
+		l-6.921,34.292h29.724L447.017,239.259z"></path> </g> </svg> <!-- etiqueta debajo del icono --> <div class="tech-label mt-3 text-sm font-semibold text-center sr-only md:not-sr-only">C#</div> </div><div key="8" class="tech-pill tech-sql box-border flex flex-col items-center justify-start rounded-lg border-4 border-[var(--card-border)] p-4 w-[160px] h-[140px] transition-transform duration-150 hover:-translate-y-1" title="SQL" aria-label="SQL"> <!-- ICON: tamaño controlado aquí --> <!--?xml version="1.0" encoding="utf-8"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current w-[56px] h-[56px] md:w-[64px] md:h-[64px]" width="800px" height="800px" viewBox="0 0 32 32" id="icon" xmlns="http://www.w3.org/2000/svg"><defs><style>.cls-1{fill:none;}</style></defs><title>SQL</title><polygon points="24 21 24 9 22 9 22 23 30 23 30 21 24 21"></polygon><path d="M18,9H14a2,2,0,0,0-2,2V21a2,2,0,0,0,2,2h1v2a2,2,0,0,0,2,2h2V25H17V23h1a2,2,0,0,0,2-2V11A2,2,0,0,0,18,9ZM14,21V11h4V21Z"></path><path d="M8,23H2V21H8V17H4a2,2,0,0,1-2-2V11A2,2,0,0,1,4,9h6v2H4v4H8a2,2,0,0,1,2,2v4A2,2,0,0,1,8,23Z"></path><rect id="_Transparent_Rectangle_" data-name="<Transparent Rectangle>" class="cls-1" width="32" height="32"></rect></svg> <!-- etiqueta debajo del icono --> <div class="tech-label mt-3 text-sm font-semibold text-center sr-only md:not-sr-only">SQL</div> </div><div key="9" class="tech-pill tech-node box-border flex flex-col items-center justify-start rounded-lg border-4 border-[var(--card-border)] p-4 w-[160px] h-[140px] transition-transform duration-150 hover:-translate-y-1" title="Node" aria-label="Node"> <!-- ICON: tamaño controlado aquí --> <!--?xml version="1.0" encoding="utf-8"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current w-[56px] h-[56px] md:w-[64px] md:h-[64px]" width="800px" height="800px" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M17.1725 2.29872C16.4627 1.89953 15.5373 1.90132 14.8269 2.29872C11.2689 4.26227 7.71082 6.22641 4.15216 8.18906C3.45969 8.55335 2.99264 9.29698 3.00009 10.0688V21.9328C2.99509 22.7197 3.48622 23.4705 4.19655 23.8298C5.21871 24.3736 6.2118 24.9726 7.25244 25.4802C8.45451 26.0709 9.95843 26.2015 11.1752 25.5855C12.1629 25.075 12.6016 23.9395 12.6003 22.896C12.6083 18.9806 12.6016 15.0651 12.6034 11.1496C12.6269 10.9756 12.4962 10.7896 12.3064 10.7938C11.8517 10.7866 11.3964 10.7896 10.9417 10.7926C10.7699 10.7764 10.6022 10.9191 10.6152 11.0918C10.6091 14.982 10.6164 18.8734 10.6115 22.7642C10.6214 23.3024 10.2578 23.8196 9.73913 24.0014C8.5412 24.4213 5.12198 22.2012 5.12198 22.2012C4.9965 22.1431 4.91682 22.007 4.92912 21.8718C4.92912 17.9576 4.92973 14.0433 4.92912 10.1297C4.91187 9.97191 5.00912 9.8298 5.15402 9.76538C8.70033 7.8134 12.2448 5.85654 15.7911 3.90336C15.9143 3.82115 16.086 3.8214 16.2089 3.90396C19.7552 5.85654 23.3003 7.81161 26.8472 9.76368C26.9926 9.828 27.0857 9.9725 27.0709 10.1297C27.0703 14.0433 27.0721 17.9576 27.0697 21.8713C27.0802 22.0098 27.0086 22.144 26.8793 22.2048C23.3661 24.1462 19.8129 26.025 16.3315 28.0228C16.1796 28.1099 16.0075 28.2086 15.8373 28.1126C14.9218 27.6062 14.0174 27.0801 13.1049 26.5688C13.0057 26.5069 12.8794 26.4803 12.7759 26.5496C12.3668 26.7652 11.982 26.9398 11.5122 27.1258C10.8524 27.387 10.9578 27.4938 11.5529 27.8405C12.62 28.4444 13.6889 29.0459 14.756 29.6504C15.4585 30.0888 16.4024 30.12 17.1275 29.7149C20.6861 27.7538 24.2436 25.7904 27.8029 23.8293C28.5113 23.468 29.0049 22.7202 28.9999 21.9327V10.0688C29.0068 9.31264 28.5576 8.58227 27.886 8.21259C24.3156 6.23947 20.7435 4.27064 17.1725 2.29872Z"></path> <path d="M22.5419 11.2062C21.1452 10.459 19.4836 10.4192 17.9315 10.5169C16.8102 10.6277 15.6309 10.9371 14.814 11.7409C13.9761 12.5489 13.7937 13.8537 14.1917 14.9085C14.4769 15.6539 15.1948 16.1386 15.9372 16.395C16.8935 16.7326 17.8979 16.837 18.9026 16.9414C19.819 17.0366 20.7357 17.1319 21.6165 17.4042C21.9763 17.5234 22.3953 17.7058 22.5055 18.0973C22.6073 18.5609 22.4957 19.0998 22.1193 19.4219C20.9237 20.3682 17.5979 20.2232 16.4166 19.4784C15.939 19.1611 15.7332 18.5994 15.6495 18.0641C15.6402 17.8973 15.5059 17.7443 15.3248 17.757C14.8713 17.7516 14.4178 17.7528 13.9643 17.7564C13.8061 17.7431 13.6416 17.8557 13.6329 18.0172C13.5397 20.4689 15.7914 21.5377 17.9039 21.773C19.1108 21.888 20.3442 21.8814 21.5327 21.6224C22.4261 21.419 23.3219 21.0444 23.9369 20.3563C24.6953 19.52 24.8444 18.2749 24.5043 17.2332C24.2443 16.4559 23.5012 15.9573 22.7416 15.7008C21.7086 15.3466 20.4844 15.1562 19.5488 15.0671C18.1889 14.9376 16.5729 14.9905 16.188 14.0969C16.0345 13.629 16.1651 13.048 16.5951 12.7602C17.7328 11.9885 20.0483 12.091 21.2265 12.6675C21.7675 12.9384 22.081 13.4948 22.2104 14.0565C22.2344 14.2215 22.3454 14.3937 22.5364 14.3865C22.9868 14.3955 23.4372 14.3889 23.8875 14.3895C24.0422 14.4003 24.2116 14.313 24.2418 14.1546C24.2227 12.9806 23.6232 11.7788 22.5419 11.2062Z"></path> </svg> <!-- etiqueta debajo del icono --> <div class="tech-label mt-3 text-sm font-semibold text-center sr-only md:not-sr-only">Node</div> </div><div key="10" class="tech-pill tech-github box-border flex flex-col items-center justify-start rounded-lg border-4 border-[var(--card-border)] p-4 w-[160px] h-[140px] transition-transform duration-150 hover:-translate-y-1" title="GitHub" aria-label="GitHub"> <!-- ICON: tamaño controlado aquí --> <!--?xml version="1.0" encoding="UTF-8" standalone="no"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current w-[56px] h-[56px] md:w-[64px] md:h-[64px]" xmlns="http://www.w3.org/2000/svg" width="800px" height="800px" viewBox="0 0 24 24" fill="none"> <path d="M18.6713 2.62664C18.5628 2.36483 18.3534 2.16452 18.0959 2.07627L18.094 2.07564L18.0922 2.07501L18.0884 2.07374L18.0805 2.07114L18.0636 2.06583C18.0518 2.06223 18.039 2.05856 18.0252 2.05487C17.9976 2.04749 17.966 2.04007 17.9305 2.03319C17.8593 2.01941 17.7728 2.00787 17.6708 2.00279C17.466 1.99259 17.2037 2.00858 16.8817 2.08054C16.3447 2.20053 15.6476 2.47464 14.7724 3.03631C14.7152 3.07302 14.6572 3.11096 14.5985 3.15016C14.5397 3.13561 14.4809 3.12155 14.422 3.108C12.8261 2.74083 11.1742 2.74083 9.57825 3.108C9.51933 3.12156 9.46049 3.13561 9.40173 3.15017C9.34298 3.11096 9.28499 3.07302 9.22775 3.03631C8.35163 2.47435 7.65291 2.20029 7.11455 2.08039C6.79179 2.00852 6.52891 1.99262 6.324 2.00278C6.22186 2.00784 6.13536 2.01931 6.06428 2.03299C6.0288 2.03982 5.99732 2.04717 5.96983 2.05447C5.95609 2.05812 5.94336 2.06176 5.93163 2.06531L5.91481 2.07056L5.90698 2.07311L5.9032 2.07437L5.90135 2.07499L5.89952 2.07561C5.63979 2.16397 5.42877 2.36623 5.32049 2.63061C4.91716 3.6154 4.8101 4.70134 5.00435 5.74306C5.01379 5.79367 5.02394 5.84418 5.0348 5.89458C4.99316 5.95373 4.9527 6.01368 4.91343 6.07439C4.30771 7.01089 3.98553 8.12791 4.00063 9.27493C4.00208 11.7315 4.71965 13.4139 5.9332 14.4965C6.62014 15.1093 7.41743 15.4844 8.21873 15.7208C8.31042 15.7479 8.40217 15.7731 8.49381 15.7967C8.48043 15.8432 8.46796 15.8901 8.45641 15.9373C8.40789 16.1357 8.37572 16.3394 8.36083 16.5461C8.35948 16.5648 8.35863 16.5835 8.35829 16.6022L8.32436 18.421L8.32417 18.4407C8.32417 18.4464 8.32417 18.4521 8.32417 18.4577C8.26262 18.473 8.20005 18.4843 8.13682 18.4916C7.942 18.5141 7.74467 18.4977 7.5561 18.4434C7.36752 18.3891 7.19127 18.2979 7.03752 18.1749C6.88377 18.0519 6.75553 17.8994 6.66031 17.7261L6.6505 17.7087C6.38836 17.2535 6.02627 16.8639 5.59142 16.5695C5.15656 16.275 4.6604 16.0836 4.14047 16.0099C3.59365 15.9324 3.08753 16.3128 3.01002 16.8597C2.93251 17.4065 3.31296 17.9126 3.85978 17.9901C4.07816 18.0211 4.28688 18.1015 4.47012 18.2256C4.65121 18.3482 4.80277 18.5103 4.9134 18.7C5.1346 19.0992 5.43165 19.4514 5.78801 19.7365C6.14753 20.0242 6.56032 20.2379 7.00272 20.3653C7.43348 20.4893 7.88392 20.5291 8.32949 20.4825C8.33039 20.7224 8.33103 20.9065 8.33103 21C8.33103 21.5523 8.75521 22 9.27847 22H14.7558C15.279 22 15.7032 21.5523 15.7032 21V17.2095C15.729 16.7802 15.685 16.3499 15.5738 15.9373C15.5585 15.8805 15.5419 15.824 15.5241 15.7679C15.5838 15.753 15.6435 15.7373 15.7032 15.7208C16.5277 15.4937 17.3513 15.1224 18.0588 14.4983C19.2791 13.4217 19.9982 11.7379 19.9996 9.27493C20.0147 8.12791 19.6925 7.01089 19.0868 6.07439C19.0475 6.01358 19.007 5.95354 18.9652 5.89429C18.976 5.84399 18.9861 5.79358 18.9955 5.74306C19.1893 4.69934 19.0795 3.61142 18.6713 2.62664Z"></path> </svg> <!-- etiqueta debajo del icono --> <div class="tech-label mt-3 text-sm font-semibold text-center sr-only md:not-sr-only">GitHub</div> </div><div key="11" class="tech-pill tech-php box-border flex flex-col items-center justify-start rounded-lg border-4 border-[var(--card-border)] p-4 w-[160px] h-[140px] transition-transform duration-150 hover:-translate-y-1" title="PHP" aria-label="PHP"> <!-- ICON: tamaño controlado aquí --> <!--?xml version="1.0" encoding="UTF-8"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current w-[56px] h-[56px] md:w-[64px] md:h-[64px]" width="800px" height="800px" viewBox="0 -127 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid"> <g> <path d="M116.447824,54.1156555 C138.734515,54.302759 154.884213,60.7284251 164.896919,73.3819622 C174.909625,86.0354994 178.213337,103.31851 174.8134,125.230993 C173.492985,135.243699 170.56348,145.063956 166.030231,154.69711 C161.684086,164.330263 155.643318,173.017208 147.897237,180.763289 C138.451187,190.583546 128.347602,196.816763 117.581136,199.46294 C106.814671,202.109117 95.6686527,203.429532 84.1484277,203.429532 L50.149063,203.429532 L39.3825975,257.26186 L0,257.26186 L40.5159096,54.1156555 L116.447824,54.1156555 Z M452.341234,54.1156555 C474.627924,54.302759 490.777623,60.7284251 500.790329,73.3819622 C510.803035,86.0354994 514.106746,103.31851 510.70681,125.230993 C509.386394,135.243699 506.456889,145.063956 501.923641,154.69711 C497.577495,164.330263 491.536728,173.017208 483.790646,180.763289 C474.344596,190.583546 464.241011,196.816763 453.474546,199.46294 C442.70808,202.109117 431.562062,203.429532 420.041837,203.429532 L386.042473,203.429532 L375.276007,257.26186 L335.89341,257.26186 L376.409319,54.1156555 L452.341234,54.1156555 Z M258.774725,0 L247.724931,54.1156555 L282.857608,54.1156555 C302.123915,54.4952082 316.47742,58.4618008 325.92347,66.0154332 C335.556623,73.5690656 338.389904,87.9279169 334.423311,109.081295 L315.440333,203.429532 L275.774407,203.429532 L293.907402,113.331216 C295.794473,103.885166 295.227817,97.1815175 292.207433,93.214925 C289.18705,89.2483324 282.670505,87.2650362 272.657799,87.2650362 L241.208386,86.9817081 L217.975487,203.429532 L178.876218,203.429532 L219.675455,0 L258.774725,0 Z M85.848396,86.415052 C83.5817716,86.6021555 81.4113719,86.6983801 79.3318511,86.6983801 L73.608,86.698 L56.6656079,171.413464 C57.7989201,171.600567 58.9322322,171.696792 60.0655444,171.696792 L64.0321369,171.696792 L64.0321369,171.696792 C82.1651315,171.883895 97.2777422,170.093048 109.364623,166.313559 C121.451504,162.346967 129.577139,148.560117 133.730835,124.947665 C137.130771,105.114703 133.730835,93.6853565 123.531025,90.6649726 C113.518319,87.6445888 100.961007,86.2279486 85.848396,86.415052 Z M421.741805,86.415052 C419.475181,86.6021555 417.304781,86.6983801 415.225261,86.6983801 L409.501,86.698 L392.559017,171.413464 C393.69233,171.600567 394.825642,171.696792 395.958954,171.696792 L399.925546,171.696792 L399.925546,171.696792 C418.058541,171.883895 433.171152,170.093048 445.258033,166.313559 C457.344914,162.346967 465.470548,148.560117 469.624244,124.947665 C473.024181,105.114703 469.624244,93.6853565 459.424435,90.6649726 C449.411729,87.6445888 436.854416,86.2279486 421.741805,86.415052 Z"></path> </g> </svg> <!-- etiqueta debajo del icono --> <div class="tech-label mt-3 text-sm font-semibold text-center sr-only md:not-sr-only">PHP</div> </div> </div> </div> <!-- En aprendizaje (misma anchura / comportamiento) --> <div class="flex-none w-[720px] max-w-full border-2 rounded-xl p-4 box-border"> <h3 class="text-2xl font-semibold mb-4 text-center">En Aprendizaje</h3> <div class="w-full grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 justify-items-center"> <div key="0" class="tech-pill tech-laravel box-border flex flex-col items-center justify-start rounded-lg border-4 border-[var(--card-border)] p-4 w-[160px] h-[140px] transition-transform duration-150 hover:-translate-y-1" title="Laravel" aria-label="Laravel"> <!--?xml version="1.0" encoding="utf-8"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current w-[56px] h-[56px] md:w-[64px] md:h-[64px]" width="800px" height="800px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"> <title>laravel</title> <path d="M13.143 23.585l10.46-5.97-4.752-2.736-10.453 6.019zM24.084 11.374l-4.757-2.736v5.417l4.758 2.737zM24.559 5.078l-4.756 2.736 4.756 2.736 4.755-2.737zM9.911 18.928l2.76-1.589v-11.934l-4.758 2.738v11.934zM7.437 1.846l-4.756 2.737 4.756 2.737 4.753-2.737zM2.204 5.406v18.452l10.464 6.022v-5.471l-5.472-3.096c-0.018-0.013-0.032-0.027-0.051-0.039-0.014-0.013-0.030-0.023-0.044-0.034l-0.001-0.003c-0.015-0.015-0.028-0.031-0.039-0.049l-0.001-0.001c-0.014-0.013-0.025-0.028-0.035-0.045l-0.001-0.001h-0.003c-0.008-0.015-0.016-0.035-0.024-0.055l-0.001-0.004c-0.007-0.015-0.015-0.032-0.022-0.051l-0.001-0.003c-0.004-0.020-0.008-0.045-0.010-0.070l-0-0.002c-0.003-0.015-0.006-0.033-0.008-0.051l-0-0.001v-12.759l-2.757-1.59zM24.085 23.857v-5.422l-10.464 5.974v5.47zM29.789 14.055v-5.417l-4.756 2.737v5.417zM30.725 7.69c0.011 0.038 0.018 0.081 0.018 0.126v0 6.513c-0 0.176-0.095 0.329-0.237 0.411l-0.002 0.001-5.468 3.149v6.241c-0 0.175-0.095 0.328-0.236 0.411l-0.002 0.001-11.416 6.57c-0.024 0.013-0.052 0.025-0.081 0.033l-0.003 0.001-0.030 0.013c-0.036 0.011-0.078 0.017-0.121 0.017s-0.085-0.006-0.125-0.018l0.003 0.001c-0.015-0.004-0.027-0.009-0.039-0.016l0.001 0.001c-0.031-0.011-0.057-0.021-0.082-0.033l0.004 0.002-11.413-6.57c-0.144-0.084-0.239-0.237-0.239-0.412v0-19.548c0-0.044 0.007-0.087 0.019-0.127l-0.001 0.003c0.004-0.015 0.013-0.025 0.018-0.040 0.009-0.029 0.019-0.053 0.030-0.076l-0.001 0.003c0.008-0.016 0.018-0.030 0.029-0.042l-0 0 0.042-0.057 0.047-0.034c0.018-0.015 0.034-0.030 0.052-0.043h0.001l5.708-3.285c0.068-0.040 0.15-0.064 0.237-0.064s0.169 0.024 0.239 0.065l-0.002-0.001 5.71 3.285c0.019 0.013 0.035 0.027 0.051 0.042l-0-0 0.048 0.034c0.016 0.018 0.025 0.038 0.042 0.057 0.012 0.012 0.022 0.026 0.031 0.041l0.001 0.001c0.010 0.020 0.020 0.044 0.029 0.069l0.001 0.004 0.016 0.040c0.011 0.035 0.018 0.076 0.018 0.118 0 0.002 0 0.004-0 0.006v-0 12.208l4.756-2.737v-6.241c0-0.001 0-0.002 0-0.002 0-0.043 0.006-0.085 0.017-0.125l-0.001 0.003c0.004-0.013 0.013-0.025 0.016-0.040 0.010-0.030 0.020-0.054 0.032-0.078l-0.002 0.004c0.009-0.015 0.023-0.025 0.032-0.042 0.015-0.019 0.027-0.038 0.042-0.054 0.014-0.013 0.029-0.025 0.045-0.035l0.001-0.001c0.018-0.013 0.033-0.029 0.052-0.040h0.001l5.708-3.286c0.068-0.040 0.15-0.064 0.237-0.064s0.169 0.024 0.239 0.065l-0.002-0.001 5.708 3.286c0.020 0.013 0.034 0.027 0.053 0.039 0.015 0.013 0.032 0.023 0.046 0.035 0.016 0.018 0.028 0.038 0.043 0.056 0.011 0.012 0.021 0.026 0.030 0.040l0.001 0.001c0.012 0.022 0.022 0.047 0.030 0.073l0.001 0.003c0.008 0.012 0.014 0.025 0.019 0.039l0 0.001z"></path> </svg> <div class="tech-label mt-3 text-sm font-semibold text-center sr-only md:not-sr-only">Laravel</div> </div><div key="1" class="tech-pill tech-net box-border flex flex-col items-center justify-start rounded-lg border-4 border-[var(--card-border)] p-4 w-[160px] h-[140px] transition-transform duration-150 hover:-translate-y-1" title=".NET" aria-label=".NET"> <!--?xml version="1.0" encoding="utf-8"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current w-[56px] h-[56px] md:w-[64px] md:h-[64px]" width="800px" height="800px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"> <title>dotnet</title> <path d="M3.175 20.551c-0.001 0.289-0.123 0.549-0.318 0.733l-0.001 0c-0.2 0.188-0.47 0.303-0.767 0.303s-0.568-0.116-0.769-0.304l0.001 0.001c-0.195-0.184-0.317-0.444-0.317-0.732s0.122-0.549 0.318-0.732l0.001-0c0.2-0.188 0.47-0.303 0.767-0.303s0.567 0.115 0.768 0.304l-0.001-0.001c0.195 0.184 0.317 0.444 0.318 0.733v0zM14.051 21.417h-1.947l-5.126-8.088c-0.118-0.182-0.227-0.392-0.314-0.613l-0.009-0.024h-0.045c0.041 0.365 0.064 0.787 0.064 1.215 0 0.104-0.001 0.208-0.004 0.312l0-0.015v7.213h-1.721v-11.003h2.073l4.955 7.898c0.209 0.326 0.344 0.552 0.404 0.675h0.030c-0.050-0.374-0.078-0.806-0.078-1.245 0-0.083 0.001-0.165 0.003-0.248l-0 0.012v-7.093h1.715zM22.433 21.417h-6.025v-11.003h5.786v1.55h-4.005v3.117h3.69v1.542h-3.69v3.254h4.244zM30.996 11.964h-3.084v9.454h-1.781v-9.454h-3.077v-1.55h7.941z"></path> </svg> <div class="tech-label mt-3 text-sm font-semibold text-center sr-only md:not-sr-only">.NET</div> </div><div key="2" class="tech-pill tech-ruby box-border flex flex-col items-center justify-start rounded-lg border-4 border-[var(--card-border)] p-4 w-[160px] h-[140px] transition-transform duration-150 hover:-translate-y-1" title="Ruby" aria-label="Ruby"> <!--?xml version="1.0" encoding="iso-8859-1"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current w-[56px] h-[56px] md:w-[64px] md:h-[64px]" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800px" height="800px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"> <g id="5151e0c8492e5103c096af88a51e4c6f"> <path display="inline" d="M365.281,386.936l108.635,96.416l-213.754-16.794c41.878-25.3,76.426-55.513,102.294-79.567
+		c0.426,0.083,0.879,0.129,1.332,0.129C364.283,387.119,364.782,387.06,365.281,386.936z M485.518,444.55l20.008-262.045
+		c-9.898,25.284-25.557,54.73-45.857,86.172L485.518,444.55z M372.547,380.983l108.384,96.196l-28.936-196.865
+		C428.142,315.82,399.5,352.122,372.547,380.983z M245.951,474.776c-23.345,12.934-47.373,23.235-71.707,30.757l249.786-16.798
+		l-177.998-13.982L245.951,474.776z M37.347,348.551l65.429,152.89l53.851-178.4L37.347,348.551z M172.514,313.988l182.182,58.517
+		l-46.488-184.204L172.514,313.988z M318.403,170.006l169.829-11.368L355.451,50.19L318.403,170.006z M415.002,2.919L303.56,2.415
+		l49.543,34.69L415.002,2.919z M4.785,283.758L1.118,392.411l26.729-48.75L4.785,283.758z M65.668,327.408
+		c21.184,1.351,42.583-3.343,64.17-12.792c14.541-6.891,29.626-15.612,44.767-25.863c21.715-15.342,43.6-34.532,65.645-56.38
+		c79.292-78.583,111.895-166.467,77.246-201.459c-8.268-8.344-20.104-12.609-35.188-12.675
+		c-45.66-0.197-113.905,34.175-172.069,91.842c-55.586,55.098-91.631,120.496-91.824,166.618
+		c-0.068,16.399,4.469,29.319,13.483,38.407C39.915,323.205,51.306,326.487,65.668,327.408z M231.103,472.18
+		c2.486-1.286,4.963-2.586,7.408-3.909l-73.322-141.472l-55.183,182.786c0.462-0.06,4.189-0.508,4.189-0.508
+		c4.816-0.613,9.573-1.318,14.271-2.115c30.318-5.169,60.315-14.633,89.154-28.139C222.184,476.689,226.671,474.47,231.103,472.18z
+		 M380.843,355.491l1.739-1.996c1.214-1.424,2.437-2.875,3.654-4.331c0,0,3.768-4.486,5.232-6.268
+		c2.464-2.98,4.913-6.021,7.371-9.079c2.258-2.82,4.51-5.649,6.758-8.529c2.358-3.021,4.716-6.048,7.056-9.134
+		c5.297-6.973,10.653-14.284,16.377-22.36c6.057-8.544,11.908-17.142,17.416-25.584l-9.931-6.073
+		c-26.371-16.125-79.37-48.606-114.203-70.003l45.074,178.595C371.585,366.118,376.018,361.104,380.843,355.491z M508.235,67.95
+		l-140.23-19.689l133.688,109.327c4.697-15.496,7.756-30.524,9.088-44.699c0.192-1.987,0.315-3.985,0.435-5.998
+		c0.114-1.852,0.179-3.711,0.229-5.574C511.766,89.244,510.685,78.029,508.235,67.95z M454.325,259.742
+		c0.344-0.453,0.729-0.962,1.149-1.573c2.669-3.779,6.465-9.962,10.686-17.409c11.748-20.717,26.239-50.254,32.282-71.993
+		L324.03,180.403c36.379,22.356,89.521,54.924,115.942,71.084l14.087,8.598C454.143,259.98,454.229,259.865,454.325,259.742z
+		 M245.264,466.128l0.545-0.307c38.046-21.084,72.05-47.021,110.142-84.087l-185.419-59.807L245.264,466.128z M0.5,411.942
+		c0.819,24.146,5.943,44.081,15.241,59.391l8.658-103.113L0.5,411.942z M34.284,361.407l-9.99,119
+		c14.234,18.62,33.252,26.935,61.528,26.935c2.848,0,5.806-0.078,8.978-0.233l-4.995-12.412
+		C78.996,467.845,48.152,391.248,34.284,361.407z M506.144,60.604c-2.056-6.289-4.68-12.096-7.811-17.306
+		c-12.632-21.015-34.452-34.461-64.871-39.976l-67.961,37.531L506.144,60.604z"></path> </g> </svg> <div class="tech-label mt-3 text-sm font-semibold text-center sr-only md:not-sr-only">Ruby</div> </div><div key="3" class="tech-pill tech-git box-border flex flex-col items-center justify-start rounded-lg border-4 border-[var(--card-border)] p-4 w-[160px] h-[140px] transition-transform duration-150 hover:-translate-y-1" title="Git" aria-label="Git"> <!--?xml version="1.0" encoding="utf-8"?--><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg class="tech-icon fill-current w-[56px] h-[56px] md:w-[64px] md:h-[64px]" width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> <title>git</title> <rect width="24" height="24" fill="none"></rect> <path d="M2.6,10.59,8.38,4.8l1.69,1.7A2,2,0,0,0,11,8.73v5.54A2,2,0,0,0,10,16a2,2,0,0,0,4,0,2,2,0,0,0-1-1.73V9.41l2.07,2.09A1.17,1.17,0,0,0,15,12a2,2,0,1,0,2-2,1.17,1.17,0,0,0-.5.07L13.93,7.5a2,2,0,0,0-1.15-2.34,2.1,2.1,0,0,0-1.28-.09L9.8,3.38l.79-.78a2,2,0,0,1,2.82,0l8,8a2,2,0,0,1,0,2.82l-8,8a2,2,0,0,1-2.82,0l-8-8A2,2,0,0,1,2.6,10.59Z"></path> </svg> <div class="tech-label mt-3 text-sm font-semibold text-center sr-only md:not-sr-only">Git</div> </div> </div> </div> </div> </section> <sectio id="contacto"> <form id="contact-form" class="max-w-md mx-auto space-y-6" action="https://formsubmit.co/tarquijoseticona@gmail.com" method="POST"> <!-- Campos ocultos de FormSubmit --> <input type="hidden" name="_captcha" value="false"> <input type="hidden" name="_subject" value="Nuevo mensaje desde tu portafolio"> <label class="block"> <span class="block mb-1">Nombre</span> <input name="name" type="text" required class="w-full border rounded px-3 py-2"> </label> <label class="block"> <span class="block mb-1">Número</span> <input name="number" type="number " required class="w-full border rounded px-3 py-2"> </label> <label class="block"> <span class="block mb-1">Correo</span> <input name="email" type="email" required class="w-full border rounded px-3 py-2"> </label> <label class="block"> <span class="block mb-1">Asunto</span> <input name="subject" type="text" required class="w-full border rounded px-3 py-2"> </label> <label class="block"> <span class="block mb-1">Mensaje</span> <textarea name="message" rows="5" required class="w-full border rounded px-3 py-2"></textarea> </label> <button type="submit" class="inline-block bg-[var(--toggle-sun)] text-white rounded px-6 py-2 hover:opacity-90 transition">
+Enviar
+</button> <p id="form-status" class="mt-4 text-center text-green-600"></p> </form> <script client:load>
+  const form   = document.getElementById('contact-form');
+  const status = document.getElementById('form-status');
+  // Tomamos el action directamente del formulario
+  const endpoint = form.action;
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+
+    const data = new FormData(form);
+    try {
+      const resp = await fetch(endpoint, {
+        method: 'POST',
+        body: data,
+      });
+
+      if (resp.ok) {
+        form.reset();
+        status.textContent = "¡Mensaje enviado!";
+        status.classList.replace('text-red-600', 'text-green-600');
+      } else {
+        throw new Error(`Error ${resp.status}`);
+      }
+    } catch (err) {
+      console.error(err);
+      status.textContent = "¡Ups! Algo salió mal.";
+      status.classList.replace('text-green-600', 'text-red-600');
+    }
+
+    setTimeout(() => {
+      status.textContent = "";
+      status.classList.replace('text-red-600', 'text-green-600');
+    }, 5000);
+  });
+</script> </sectio> <section id="sobremi" class="py-20 px-4 md:px-16 bg-[var(--toggle-bg)] transition-colors"> <h2 class="text-3xl font-bold text-center mb-6 text-[var(--toggle-sun)] dark:text-[var(--toggle-sun-dark)]">
+Sobre mí
+</h2> <!-- Texto: hereda color (sin color explícito) --> <p class="max-w-2xl mx-auto text-center text-lg leading-relaxed mb-12">
+Soy un desarrollador con total disponibilidad y dedicación inmediata al trabajo.
+    Como estudiante con más de <strong>1 año de aprendizaje intensivo</strong>,
+    busco oportunidades laborales donde aportar mis conocimientos y seguir creciendo.
+</p> <!-- Iconos mucho más abajo --> <div class="flex justify-center mt-32"> <div class="flex items-center gap-6"> <!-- WhatsApp: botón que muestra popover con QR encima --> <div class="relative"> <button id="wspBtn" class="tech-pill tech-wsp inline-flex items-center justify-center rounded-full border-0 bg-transparent p-1" aria-label="WhatsApp" type="button"> <span class="tech-icon fill-current inline-block" style="width:40px;height:40px;"> <svg class="w-full h-full fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path fill-rule="evenodd" clip-rule="evenodd" d="M3.50002 12C3.50002 7.30558 7.3056 3.5 12 3.5C16.6944 3.5 20.5 7.30558 20.5 12C20.5 16.6944 16.6944 20.5 12 20.5C10.3278 20.5 8.77127 20.0182 7.45798 19.1861C7.21357 19.0313 6.91408 18.9899 6.63684 19.0726L3.75769 19.9319L4.84173 17.3953C4.96986 17.0955 4.94379 16.7521 4.77187 16.4751C3.9657 15.176 3.50002 13.6439 3.50002 12ZM12 1.5C6.20103 1.5 1.50002 6.20101 1.50002 12C1.50002 13.8381 1.97316 15.5683 2.80465 17.0727L1.08047 21.107C0.928048 21.4637 0.99561 21.8763 1.25382 22.1657C1.51203 22.4552 1.91432 22.5692 2.28599 22.4582L6.78541 21.1155C8.32245 21.9965 10.1037 22.5 12 22.5C17.799 22.5 22.5 17.799 22.5 12C22.5 6.20101 17.799 1.5 12 1.5ZM14.2925 14.1824L12.9783 15.1081C12.3628 14.7575 11.6823 14.2681 10.9997 13.5855C10.2901 12.8759 9.76402 12.1433 9.37612 11.4713L10.2113 10.7624C10.5697 10.4582 10.6678 9.94533 10.447 9.53028L9.38284 7.53028C9.23954 7.26097 8.98116 7.0718 8.68115 7.01654C8.38113 6.96129 8.07231 7.046 7.84247 7.24659L7.52696 7.52195C6.76823 8.18414 6.3195 9.2723 6.69141 10.3741C7.07698 11.5163 7.89983 13.314 9.58552 14.9997C11.3991 16.8133 13.2413 17.5275 14.3186 17.8049C15.1866 18.0283 16.008 17.7288 16.5868 17.2572L17.1783 16.7752C17.4313 16.5691 17.5678 16.2524 17.544 15.9269C17.5201 15.6014 17.3389 15.308 17.0585 15.1409L15.3802 14.1409C15.0412 13.939 14.6152 13.9552 14.2925 14.1824Z"></path> </svg> </span> </button> <!-- popover QR (inicialmente oculto) --> <div id="wspPopover" class="hidden absolute -top-64 left-1/2 transform -translate-x-1/2 w-44  rounded-xl shadow-lg z-50 p-3 text-center"> <button id="wspClose" class="absolute right-2 top-2 text-sm opacity-80 hover:opacity-100" aria-label="Cerrar">✕</button> <img id="wspImg" src="/assets/jose.png" alt="QR WhatsApp" class="mx-auto w-55 h-55 object-cover rounded-md"> <p id="wspImgError" class="hidden mt-2 text-xs text-red-600 dark:text-red-400">No se encontró la imagen. Revisa `/public/assets/jose.jpeg`.</p> <p class="mt-2 text-xs text-[var(--text-light)]   ">Escanea o guarda mi contacto</p> </div> </div> <!-- Gmail: copia email --> <div class="relative"> <button id="gmailBtn" class="tech-pill tech-gmail inline-flex items-center justify-center rounded-full border-0 bg-transparent p-1" aria-label="Gmail - copiar email" type="button"> <span class="tech-icon fill-current inline-block" style="width:40px;height:40px;"> <svg class="w-full h-full fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" version="1.1"> <title>gmail</title> <path d="M30.996 7.824v17.381c0 0 0 0 0 0.001 0 1.129-0.915 2.044-2.044 2.044-0 0-0 0-0.001 0h-4.772v-11.587l-8.179 6.136-8.179-6.136v11.588h-4.772c0 0 0 0-0 0-1.129 0-2.044-0.915-2.044-2.044 0-0 0-0.001 0-0.001v0-17.381c0-0 0-0.001 0-0.001 0-1.694 1.373-3.067 3.067-3.067 0.694 0 1.334 0.231 1.848 0.619l-0.008-0.006 10.088 7.567 10.088-7.567c0.506-0.383 1.146-0.613 1.84-0.613 1.694 0 3.067 1.373 3.067 3.067v0z"></path> </svg> </span> </button> </div> <!-- LinkedIn: enlace --> <a id="lnLink" class="tech-pill tech-linkedin inline-flex items-center justify-center rounded-full border-0 bg-transparent p-1" href="https://www.linkedin.com/in/jose-gonzalo-tarqui-ticona-746251332/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"> <span class="tech-icon fill-current inline-block" style="width:40px;height:40px;"> <svg class="w-full h-full fill-current" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800px" height="800px" viewBox="0 0 20 20" version="1.1"> <title>linkedin [#161]</title> <desc>Created with Sketch.</desc> <defs></defs> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Dribbble-Light-Preview" transform="translate(-180.000000, -7479.000000)" fill="currentColor"> <g id="icons" transform="translate(56.000000, 160.000000)"> <path d="M144,7339 L140,7339 L140,7332.001 C140,7330.081 139.153,7329.01 137.634,7329.01 C135.981,7329.01 135,7330.126 135,7332.001 L135,7339 L131,7339 L131,7326 L135,7326 L135,7327.462 C135,7327.462 136.255,7325.26 139.083,7325.26 C141.912,7325.26 144,7326.986 144,7330.558 L144,7339 L144,7339 Z M126.442,7323.921 C125.093,7323.921 124,7322.819 124,7321.46 C124,7320.102 125.093,7319 126.442,7319 C127.79,7319 128.883,7320.102 128.883,7321.46 C128.884,7322.819 127.79,7323.921 126.442,7323.921 L126.442,7323.921 Z M124,7339 L129,7339 L129,7326 L124,7326 L124,7339 Z" id="linkedin-[#161]"></path> </g> </g> </g> </svg> </span> </a> <!-- CV: descarga --> <a id="cvLink" class="tech-pill tech-cv inline-flex items-center justify-center rounded-full border-0 bg-transparent p-1" href="/assets/CV.pdf" download aria-label="Descargar CV"> <span class="tech-icon fill-current inline-block" style="width:40px;height:40px;"> <svg class="w-full h-full fill-current" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000" height="800px" width="800px" version="1.1" id="Layer_1" viewBox="0 0 512 512" xml:space="preserve"> <g> <g> <g> <path d="M320,213.333c-23.531,0-42.667,19.136-42.667,42.667h85.333C362.667,232.469,343.531,213.333,320,213.333z"></path> <path d="M320,170.667c11.776,0,21.333-9.579,21.333-21.333c0-11.755-9.557-21.333-21.333-21.333s-21.333,9.579-21.333,21.333     C298.667,161.088,308.224,170.667,320,170.667z"></path> <path d="M448,0H64C52.203,0,42.667,9.557,42.667,21.333v469.333C42.667,502.443,52.203,512,64,512h384     c11.797,0,21.333-9.557,21.333-21.333V21.333C469.333,9.557,459.797,0,448,0z M128,106.667h42.667     c11.797,0,21.333,9.557,21.333,21.333s-9.536,21.333-21.333,21.333H128c-11.797,0-21.333-9.557-21.333-21.333     S116.203,106.667,128,106.667z M128,170.667h85.333c11.797,0,21.333,9.557,21.333,21.333s-9.536,21.333-21.333,21.333H128     c-11.797,0-21.333-9.557-21.333-21.333S116.203,170.667,128,170.667z M128,234.667h21.333c11.797,0,21.333,9.557,21.333,21.333     s-9.536,21.333-21.333,21.333H128c-11.797,0-21.333-9.557-21.333-21.333S116.203,234.667,128,234.667z M170.667,426.667H128     c-11.797,0-21.333-9.557-21.333-21.333S116.203,384,128,384h42.667c11.797,0,21.333,9.557,21.333,21.333     S182.464,426.667,170.667,426.667z M384,426.667H234.667c-11.797,0-21.333-9.557-21.333-21.333S222.869,384,234.667,384H384     c11.797,0,21.333,9.557,21.333,21.333S395.797,426.667,384,426.667z M384,362.667H128c-11.797,0-21.333-9.557-21.333-21.333     c0-11.776,9.536-21.333,21.333-21.333h256c11.797,0,21.333,9.557,21.333,21.333C405.333,353.109,395.797,362.667,384,362.667z      M405.333,277.333c0,11.776-9.536,21.333-21.333,21.333H256c-11.797,0-21.333-9.557-21.333-21.333V256     c0-27.968,13.696-52.587,34.539-68.16c-8.171-10.752-13.205-24-13.205-38.507c0-35.285,28.715-64,64-64s64,28.715,64,64     c0,14.507-5.035,27.755-13.205,38.507c20.843,15.573,34.539,40.192,34.539,68.16V277.333z"></path> </g> </g> </g> </svg> </span> </a> </div> </div> <!-- Toast "Copiado" --> <div id="copyToast" class="pointer-events-none fixed bottom-12 left-1/2 transform -translate-x-1/2 bg-[var(--toggle-sun)] text-white px-4 py-2 rounded-full opacity-0 transition-opacity duration-300 z-50">
+Copiado
+</div>  <script type="module" client:load>
+    // ELEMENTOS
+    const wspBtn = document.getElementById('wspBtn');
+    const wspPopover = document.getElementById('wspPopover');
+    const wspClose = document.getElementById('wspClose');
+    const wspImg = document.getElementById('wspImg');
+    const wspImgError = document.getElementById('wspImgError');
+
+    const gmailBtn = document.getElementById('gmailBtn');
+    const copyToast = document.getElementById('copyToast');
+    const EMAIL = 'tarquijoseticona@gmail.com';
+
+    // SHOW/HIDE QR
+    function showWsp() { wspPopover.classList.remove('hidden'); }
+    function hideWsp() { wspPopover.classList.add('hidden'); }
+
+    wspBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      wspPopover.classList.toggle('hidden');
+    });
+    wspClose?.addEventListener('click', (e) => { e.stopPropagation(); hideWsp(); });
+
+    document.addEventListener('click', (ev) => {
+      if (!wspPopover) return;
+      if (wspPopover.classList.contains('hidden')) return;
+      if (!wspPopover.contains(ev.target) && !wspBtn.contains(ev.target)) {
+        hideWsp();
+      }
+    });
+
+    // IMAGE ERROR handling
+    if (wspImg) {
+      wspImg.addEventListener('error', () => {
+        console.warn('Error loading QR image /assets/jose.jpeg — revisa nombre/ubicación en public/assets');
+        wspImg.style.display = 'none';
+        if (wspImgError) wspImgError.classList.remove('hidden');
+      });
+    }
+
+    // COPY EMAIL with toast (3s)
+    function showToast() {
+      if (!copyToast) return;
+      copyToast.style.opacity = '1';
+      copyToast.style.animation = 'toast-fade 3s ease forwards';
+      // limpiar después de 3.2s
+      setTimeout(() => {
+        copyToast.style.opacity = '0';
+        copyToast.style.animation = '';
+      }, 3200);
+    }
+
+    gmailBtn?.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      try {
+        await navigator.clipboard.writeText(EMAIL);
+        showToast();
+      } catch (err) {
+        // fallback
+        const ta = document.createElement('textarea');
+        ta.value = EMAIL;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); showToast(); } catch (e) { console.warn('copy fallback failed', e); }
+        document.body.removeChild(ta);
+      }
+    });
+  </script> </section> </main> </body></html>
