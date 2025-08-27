@@ -12,6 +12,6 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  site: 'https://josgtt.github.io/nuevo-port/',
-  base: '/nuevo-port/',
+  site: 'https://www.josgt.website',
+  base: '/portafolio/',
 });
