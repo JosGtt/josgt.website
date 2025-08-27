@@ -3,7 +3,7 @@
 ─────────────────────────────────────────────────────────────────────────────*/
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
 @import "tailwindcss";
-
+@source "./src/**/*.{astro,html,js,jsx,ts,tsx,md,mdx}";
 @layer tailwind {
   darkMode: 'class';
 }

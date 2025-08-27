@@ -12,6 +12,6 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  site: 'https://www.josgt.website',
-  base: '/portafolio/',
+   site: 'https://www.josgt.website',     // o tu dominio
+  base: '/portafolio', 
 });
