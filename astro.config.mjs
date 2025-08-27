@@ -1,17 +1,17 @@
 // astro.config.mjs
 import { defineConfig } from 'astro/config';
-import tailwindcss from '@tailwindcss/vite';
+import tailwind from '@tailwindcss/vite';
 
 export default defineConfig({
-  // <-- Asegúrate de tener esto:
   i18n: {
     locales: ['en','es'],
     defaultLocale: 'en',
     routes: { prefixDefaultLocale: false },
   },
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [tailwind()],
   },
-   site: 'https://www.josgt.website',     // o tu dominio
-  base: '/portafolio', 
+  site: 'https://www.josgt.website',
+  // base dinámico: si no se define ASTRO_BASE se usa '/'
+  base: process.env.ASTRO_BASE ?? '/',
 });
