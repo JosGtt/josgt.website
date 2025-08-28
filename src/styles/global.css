@@ -5,6 +5,9 @@
 @import "tailwindcss";
 @source "./src/**/*.{astro,html,js,jsx,ts,tsx,md,mdx}";
 @layer tailwind {
+  @tailwind base;
+@tailwind components;
+@tailwind utilities;
   darkMode: 'class';
 }
 
