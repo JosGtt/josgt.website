@@ -1,10 +1,5 @@
 ---
-/** CodeTag.astro
- * Props:
- *  - text: string, por ejemplo "<>" o "</>"
- *  - size: tailwind sizing class (ej: "text-3xl md:text-6xl")
- *  - boxed: boolean (si quieres el fondo rectángulo tipo "svg")
- */
+
 export interface Props {
   text?: string;
   size?: string;
@@ -79,7 +74,7 @@ const chars = Array.from(text);
     50% { opacity: 0; }
     100% { opacity: 1; }
   }
-  /* usa la variable que ya tienes en :root / html.dark */
+
   .code-tag { color: var(--toggle-sun); }
   html.dark .code-tag { color: var(--toggle-moon); }
   </style>

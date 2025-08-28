@@ -82,14 +82,12 @@ const links = [
     'shadow-md'
   ];
 
-  // -- mantén cristal en el nav cuando scrollees (igual que antes) --
   function handleScrollGlass() {
     if (window.scrollY > 0) {
       menu.classList.add(...glassClasses);
       toggle.classList.add(...glassClasses);
     } else {
       menu.classList.remove(...glassClasses);
-      // quitar glass del toggle solo si el dropdown está cerrado
       if (mobileMenu.classList.contains('hidden')) {
         toggle.classList.remove(...glassClasses);
       }
@@ -98,22 +96,17 @@ const links = [
   window.addEventListener('scroll', handleScrollGlass);
   handleScrollGlass();
 
-  // -- Posicionar dropdown justo debajo del botón (no full-width) --
+
   function positionDropdownUnderButton() {
     const navRect = menu.getBoundingClientRect();
     const btnRect = toggle.getBoundingClientRect();
 
-    // left relativo al nav (garantiza que el dropdown quede bajo el botón)
     const left = Math.max(8, btnRect.left - navRect.left);
-
-    // top = abajo del botón + pequeño gap
     const top = btnRect.bottom - navRect.top + 8;
 
     mobileMenu.style.left = `${left}px`;
     mobileMenu.style.top = `${top}px`;
   }
-
-  // -- Abrir / cerrar móvil (y aplicar cristal al dropdown) --
   function openMobile() {
     positionDropdownUnderButton();
     mobileMenu.classList.remove('hidden');
@@ -134,18 +127,13 @@ const links = [
     if (mobileMenu.classList.contains('hidden')) openMobile();
     else closeMobile();
   });
-
-  // cerrar al click fuera
   document.addEventListener('click', (e) => {
     if (!menu.contains(e.target)) closeMobile();
   });
 
-  // cerrar y reposicionar al redimensionar
   window.addEventListener('resize', () => {
     closeMobile();
   });
-
-  // si usas devtools y mueves el toggle, reposiciona el dropdown cuando se abre
   const mo = new MutationObserver(() => {
     if (!mobileMenu.classList.contains('hidden')) positionDropdownUnderButton();
   });

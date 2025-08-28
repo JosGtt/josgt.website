@@ -10,14 +10,14 @@ import CV from '../components/icons/CV.astro';
     Sobre mí
   </h2>
 
-  <!-- Texto: hereda color (sin color explícito) -->
+
   <p class="max-w-2xl mx-auto text-center text-lg leading-relaxed mb-12">
     Soy un desarrollador con total disponibilidad y dedicación inmediata al trabajo.
     Como estudiante con más de <strong>1 año de aprendizaje intensivo</strong>,
     busco oportunidades laborales donde aportar mis conocimientos y seguir creciendo.
   </p>
 
-  <!-- Iconos mucho más abajo -->
+
   <div class="flex justify-center mt-32">
     <div class="flex items-center gap-6">
 
@@ -91,102 +91,106 @@ import CV from '../components/icons/CV.astro';
     Copiado
   </div>
 
-  <style is:global>
-    /* colores y hover (usa el mismo efecto neon que tienes para .tech-pill) */
-    .tech-wsp { --tech-color: #25D366; }      /* WhatsApp verde */
-    .tech-gmail { --tech-color: #D44638; }    /* Gmail rojo */
-    .tech-linkedin { --tech-color: #0077B5; } /* LinkedIn azul */
-    .tech-cv { --tech-color: var(--color-internet); } /* CV: usa color de internet (azul) */
+<style is:global>
+  /* Colores para los botones de contacto.
+     El efecto hover reutiliza el mismo "neón" que usas en .tech-pill */
+  .tech-wsp { --tech-color: #25D366; }      /* verde WhatsApp */
+  .tech-gmail { --tech-color: #D44638; }    /* rojo Gmail */
+  .tech-linkedin { --tech-color: #0077B5; } /* azul LinkedIn */
+  .tech-cv { --tech-color: var(--color-internet); } /* CV: color "internet" (azul) */
 
-    /* Asegurar que .tech-pill hover use la variable --tech-color local */
-    .tech-pill.tech-wsp:hover .tech-icon,
-    .tech-pill.tech-gmail:hover .tech-icon,
-    .tech-pill.tech-linkedin:hover .tech-icon,
-    .tech-pill.tech-cv:hover .tech-icon {
-      color: var(--tech-color);
-      filter: drop-shadow(0 0 6px rgba(255,255,255,0.95)) drop-shadow(0 0 12px var(--tech-color));
+  /* Forzar que el hover tome la variable --tech-color correspondiente */
+  .tech-pill.tech-wsp:hover .tech-icon,
+  .tech-pill.tech-gmail:hover .tech-icon,
+  .tech-pill.tech-linkedin:hover .tech-icon,
+  .tech-pill.tech-cv:hover .tech-icon {
+    color: var(--tech-color);
+    filter: drop-shadow(0 0 6px rgba(255,255,255,0.95)) drop-shadow(0 0 12px var(--tech-color));
+  }
+
+  /* Popover de WhatsApp: un poco más ancho para que no se corte */
+  #wspPopover { width: 11rem; }
+  @media(min-width:768px) { #wspPopover { width: 12rem; } }
+
+  /* Animación para el toast de copia (aparece, permanece y luego se desvanece) */
+  @keyframes toast-fade {
+    0% { opacity: 0; transform: translateY(6px) scale(.98); }
+    10% { opacity: 1; transform: translateY(0) scale(1); }
+    90% { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-6px) scale(.98); }
+  }
+</style>
+
+<script type="module" client:load>
+  // Referencias a elementos del DOM que usamos para WhatsApp y Gmail
+  const wspBtn = document.getElementById('wspBtn');
+  const wspPopover = document.getElementById('wspPopover');
+  const wspClose = document.getElementById('wspClose');
+  const wspImg = document.getElementById('wspImg');
+  const wspImgError = document.getElementById('wspImgError');
+
+  const gmailBtn = document.getElementById('gmailBtn');
+  const copyToast = document.getElementById('copyToast');
+  const EMAIL = 'tarquijoseticona@gmail.com';
+
+  // Abrir / cerrar el popover que muestra el QR de WhatsApp
+  function showWsp() { wspPopover.classList.remove('hidden'); }
+  function hideWsp() { wspPopover.classList.add('hidden'); }
+
+  wspBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    wspPopover.classList.toggle('hidden');
+  });
+  wspClose?.addEventListener('click', (e) => { e.stopPropagation(); hideWsp(); });
+
+  // Cerramos el popover si el usuario hace clic fuera de él
+  document.addEventListener('click', (ev) => {
+    if (!wspPopover) return;
+    if (wspPopover.classList.contains('hidden')) return;
+    if (!wspPopover.contains(ev.target) && !wspBtn.contains(ev.target)) {
+      hideWsp();
     }
+  });
 
-    /* ligeramente más grande el popover top para no cortarse */
-    #wspPopover { width: 11rem; }
-    @media(min-width:768px) { #wspPopover { width: 12rem; } }
-
-    /* animación toast */
-    @keyframes toast-fade {
-      0% { opacity: 0; transform: translateY(6px) scale(.98); }
-      10% { opacity: 1; transform: translateY(0) scale(1); }
-      90% { opacity: 1; transform: translateY(0) scale(1); }
-      100% { opacity: 0; transform: translateY(-6px) scale(.98); }
-    }
-  </style>
-
-  <script type="module" client:load>
-    // ELEMENTOS
-    const wspBtn = document.getElementById('wspBtn');
-    const wspPopover = document.getElementById('wspPopover');
-    const wspClose = document.getElementById('wspClose');
-    const wspImg = document.getElementById('wspImg');
-    const wspImgError = document.getElementById('wspImgError');
-
-    const gmailBtn = document.getElementById('gmailBtn');
-    const copyToast = document.getElementById('copyToast');
-    const EMAIL = 'tarquijoseticona@gmail.com';
-
-    // SHOW/HIDE QR
-    function showWsp() { wspPopover.classList.remove('hidden'); }
-    function hideWsp() { wspPopover.classList.add('hidden'); }
-
-    wspBtn?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      wspPopover.classList.toggle('hidden');
+  // Si la imagen del QR falla al cargar, ocultamos la imagen y mostramos un mensaje alternativo
+  if (wspImg) {
+    wspImg.addEventListener('error', () => {
+      console.warn('No se pudo cargar la imagen QR /assets/jose.jpeg — revisa el nombre o la ruta en public/assets');
+      wspImg.style.display = 'none';
+      if (wspImgError) wspImgError.classList.remove('hidden');
     });
-    wspClose?.addEventListener('click', (e) => { e.stopPropagation(); hideWsp(); });
+  }
 
-    document.addEventListener('click', (ev) => {
-      if (!wspPopover) return;
-      if (wspPopover.classList.contains('hidden')) return;
-      if (!wspPopover.contains(ev.target) && !wspBtn.contains(ev.target)) {
-        hideWsp();
-      }
-    });
+  // Mostrar un toast corto cuando el email se copia al portapapeles (duración ~3s)
+  function showToast() {
+    if (!copyToast) return;
+    copyToast.style.opacity = '1';
+    copyToast.style.animation = 'toast-fade 3s ease forwards';
+    // Limpiar el estado después de la animación
+    setTimeout(() => {
+      copyToast.style.opacity = '0';
+      copyToast.style.animation = '';
+    }, 3200);
+  }
 
-    // IMAGE ERROR handling
-    if (wspImg) {
-      wspImg.addEventListener('error', () => {
-        console.warn('Error loading QR image /assets/jose.jpeg — revisa nombre/ubicación en public/assets');
-        wspImg.style.display = 'none';
-        if (wspImgError) wspImgError.classList.remove('hidden');
-      });
+  // Copiar email al portapapeles, con fallback si no está disponible la API moderna
+  gmailBtn?.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    try {
+      await navigator.clipboard.writeText(EMAIL);
+      showToast();
+    } catch (err) {
+      // Fallback clásico usando un textarea temporal
+      const ta = document.createElement('textarea');
+      ta.value = EMAIL;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); showToast(); } catch (e) { console.warn('El método de copia por fallback falló', e); }
+      document.body.removeChild(ta);
     }
+  });
+</script>
 
-    // COPY EMAIL with toast (3s)
-    function showToast() {
-      if (!copyToast) return;
-      copyToast.style.opacity = '1';
-      copyToast.style.animation = 'toast-fade 3s ease forwards';
-      // limpiar después de 3.2s
-      setTimeout(() => {
-        copyToast.style.opacity = '0';
-        copyToast.style.animation = '';
-      }, 3200);
-    }
-
-    gmailBtn?.addEventListener('click', async (e) => {
-      e.stopPropagation();
-      try {
-        await navigator.clipboard.writeText(EMAIL);
-        showToast();
-      } catch (err) {
-        // fallback
-        const ta = document.createElement('textarea');
-        ta.value = EMAIL;
-        ta.style.position = 'fixed';
-        ta.style.left = '-9999px';
-        document.body.appendChild(ta);
-        ta.select();
-        try { document.execCommand('copy'); showToast(); } catch (e) { console.warn('copy fallback failed', e); }
-        document.body.removeChild(ta);
-      }
-    });
-  </script>
 </section>
