@@ -81,6 +81,10 @@
   --color-csharp:  #239120;   /* C# - verde oscuro */
   --color-net:     #512BD4;   /* .NET - violeta */
   --color-ruby:    #CC342D;   /* Ruby - rojo oscuro */
+  --color-elixir:  #8D67AF;   /* Elixir - morado */
+  --color-linux:   #111111;   /* Linux - negro */
+  --color-blazor:  #00B7D8;   /* Blazor - celeste */
+  --color-angular: #DD0031;   /* Angular - naranja rojizo */
   --color-internet:#0077FF;   /* Internet / link - azul */}
   
 
@@ -284,6 +288,30 @@ html::before {
 .tech-pill.tech-ruby:hover .tech-icon {
   color: var(--color-ruby);
   filter: drop-shadow(0 0 6px rgba(255,255,255,0.95)) drop-shadow(0 0 10px var(--color-ruby));
+}
+
+/* Elixir */
+.tech-pill.tech-elixir:hover .tech-icon {
+  color: var(--color-elixir);
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.95)) drop-shadow(0 0 10px var(--color-elixir));
+}
+
+/* Linux */
+.tech-pill.tech-linux:hover .tech-icon {
+  color: var(--color-linux);
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.95)) drop-shadow(0 0 10px var(--color-linux));
+}
+
+/* Blazor */
+.tech-pill.tech-blazor:hover .tech-icon {
+  color: var(--color-blazor);
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.95)) drop-shadow(0 0 10px var(--color-blazor));
+}
+
+/* Angular */
+.tech-pill.tech-angular:hover .tech-icon {
+  color: var(--color-angular);
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.95)) drop-shadow(0 0 10px var(--color-angular));
 }
 
 /* Internet (link) */

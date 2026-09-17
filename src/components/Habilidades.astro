@@ -16,6 +16,10 @@ import RubyIcon      from "../components/icons/RUBY.astro";
 import LARAVELIcon   from "../components/icons/LARAVEL.astro";
 import PHPIcon       from "../components/icons/PHP.astro";
 import NETIcon       from "../components/icons/NET.astro";
+import ElixirIcon    from "../components/icons/ELIXIR.astro";
+import LinuxIcon     from "../components/icons/LINUX.astro";
+import BlazorIcon    from "../components/icons/BLAZOR.astro";
+import AngularIcon   from "../components/icons/ANGULAR.astro";
 ---
 <section id="habilidades" class="py-16 px-4 md:px-50">
   <h2 class="text-3xl font-bold text-center text-glow mb-9">Habilidades &amp; Aprendizaje</h2>
@@ -40,7 +44,12 @@ import NETIcon       from "../components/icons/NET.astro";
           { Icon: SQLIcon,     cls: 'tech-sql',      label: 'SQL' },
           { Icon: NodeIcon,    cls: 'tech-node',     label: 'Node' },
           { Icon: GitHubIcon,  cls: 'tech-github',   label: 'GitHub' },
-          { Icon: PHPIcon,     cls: 'tech-php',      label: 'PHP' }
+          { Icon: PHPIcon,     cls: 'tech-php',      label: 'PHP' },
+          { Icon: NETIcon,     cls: 'tech-net',      label: '.NET' },
+          { Icon: LARAVELIcon, cls: 'tech-laravel',  label: 'Laravel' },
+          { Icon: GitIcon,     cls: 'tech-git',      label: 'Git' },
+          { Icon: RubyIcon,    cls: 'tech-ruby',     label: 'Ruby' },
+          { Icon: AngularIcon, cls: 'tech-angular',  label: 'Angular' }
         ].map(({ Icon, cls, label }, i) => (
           <div
             key={i}
@@ -63,10 +72,9 @@ import NETIcon       from "../components/icons/NET.astro";
 
       <div class="w-full grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 justify-items-center">
         {[
-          { Icon: LARAVELIcon, cls: 'tech-laravel', label: 'Laravel' },
-          { Icon: NETIcon,     cls: 'tech-net',     label: '.NET' },
-          { Icon: RubyIcon,    cls: 'tech-ruby',    label: 'Ruby' },
-          { Icon: GitIcon,     cls: 'tech-git',     label: 'Git' }
+          { Icon: ElixirIcon, cls: 'tech-elixir', label: 'Elixir' },
+          { Icon: LinuxIcon,  cls: 'tech-linux',  label: 'Linux' },
+          { Icon: BlazorIcon, cls: 'tech-blazor', label: 'Blazor' }
         ].map(({ Icon, cls, label }, i) => (
           <div
             key={i}

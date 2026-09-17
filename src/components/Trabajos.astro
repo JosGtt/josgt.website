@@ -155,6 +155,46 @@ import InternetIcon from "../components/icons/Internet.astro";
           </div>
         </div>
       </article>
+
+      <!-- Trabajo 2: SEDEGES (index 2) -->
+      <article class="proj-card" data-project-index="2">
+        <img data-project-index="2" src="/assets/sedeges1.png" alt="SEDEGES — preview" class="proj-img" />
+
+        <div class="proj-body">
+          <div class="proj-title">SEDEGES, Servicio Departamental de Gestión Social</div>
+          <div class="proj-desc">Es un sistema de gestión de hojas de ruta con creación de usuarios usando APIs y base de datos.</div>
+
+          <div class="tech-row">
+            <div class="tech-pill tech-react" title="React">
+              <ReactIcon class="tech-icon fill-current" />
+            </div>
+
+            <div class="tech-pill tech-node" title="Node.js">
+              <NodeIcon class="tech-icon fill-current" />
+            </div>
+
+            <div class="tech-pill tech-sql" title="SQL">
+              <SQLIcon class="tech-icon fill-current" />
+            </div>
+
+            <div class="tech-pill tech-git" title="Git">
+              <GitIcon class="tech-icon fill-current" />
+            </div>
+
+            <div class="tech-pill tech-github" title="GitHub">
+              <GitHubIcon class="tech-icon fill-current" />
+            </div>
+
+            <div class="tech-pill tech-tailwind" title="Tailwind CSS">
+              <TailwindIcon class="tech-icon fill-current" />
+            </div>
+
+            <div class="tech-pill tech-css" title="CSS">
+              <CSSIcon class="tech-icon fill-current" />
+            </div>
+          </div>
+        </div>
+      </article>
     </div>
   </div>
 
@@ -204,6 +244,19 @@ import InternetIcon from "../components/icons/Internet.astro";
             { "img": "/assets/Trabajo5.png", "desc": "consultas" }
           ],
           "live": null
+        },
+        {
+          "title": "SEDEGES, Servicio Departamental de Gestión Social",
+          "images": [
+            { "img": "/assets/sedeges1.png", "desc": "Dashboard del usuario principal con información relevante del sistema" },
+            { "img": "/assets/sedeges2.png", "desc": "Panel de creación de nuevo registro de hoja de ruta" },
+            { "img": "/assets/sedeges3.png", "desc": "Registro de hojas de ruta" },
+            { "img": "/assets/sedeges4.png", "desc": "Centro de historial de modificaciones, añadidos y modificados del sistema" },
+            { "img": "/assets/sedeges5.png", "desc": "Sistema de envío de hojas de ruta a unidades" },
+            { "img": "/assets/sedeges6.png", "desc": "Gestión de las unidades activas y creadas" },
+            { "img": "/assets/sedeges7.png", "desc": "Sistema de creación de usuarios y unidades" }
+          ],
+          "live": null
         }
       ]
     }
@@ -215,6 +268,34 @@ import InternetIcon from "../components/icons/Internet.astro";
     const raw = document.getElementById('projects-data')?.textContent || '{"projects": []}';
     let projects = [];
     try { projects = JSON.parse(raw).projects || []; } catch(e){ console.warn('projects-data parse error', e); }
+
+    function makeFallbackImage(title = 'Proyecto') {
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760">
+          <defs>
+            <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#1d4ed8"/>
+              <stop offset="100%" stop-color="#0f172a"/>
+            </linearGradient>
+          </defs>
+          <rect width="1200" height="760" fill="url(#bg)"/>
+          <circle cx="930" cy="150" r="140" fill="rgba(255,255,255,0.10)"/>
+          <circle cx="200" cy="640" r="180" fill="rgba(59,130,246,0.20)"/>
+          <rect x="70" y="90" width="1060" height="580" rx="26" fill="rgba(15,23,42,0.28)" stroke="rgba(255,255,255,0.18)"/>
+          <text x="600" y="360" text-anchor="middle" font-family="Arial, sans-serif" font-size="64" font-weight="700" fill="white">${title}</text>
+          <text x="600" y="430" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="rgba(255,255,255,0.80)">Imagen no disponible</text>
+        </svg>
+      `;
+      return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    }
+
+    function assignFallbackImage(imgEl, label) {
+      const fallback = makeFallbackImage(label);
+      if (imgEl.dataset.fallbackApplied === 'true' && imgEl.src === fallback) return;
+      imgEl.dataset.fallbackApplied = 'true';
+      imgEl.src = fallback;
+      imgEl.classList.add('img-missing');
+    }
 
     // sync thumbnails: set each .proj-img src to the first image in its project (if exists)
     (function syncThumbnails() {
@@ -237,7 +318,7 @@ import InternetIcon from "../components/icons/Internet.astro";
         // detect load error
         imgEl.onerror = () => {
           console.warn(`Thumbnail load failed for project ${idx} — tried: ${first}`);
-          imgEl.classList.add('img-missing');
+          assignFallbackImage(imgEl, projects[idx]?.title || 'Proyecto');
         };
       });
     })();
@@ -266,7 +347,7 @@ import InternetIcon from "../components/icons/Internet.astro";
       // detect modal image load errors
       modalImg.onerror = () => {
         console.warn(`Modal image load failed for project ${idx} slide ${slide} — tried: ${s.img}`);
-        modalImg.classList.add('img-missing');
+        assignFallbackImage(modalImg, projects[idx]?.title || 'Proyecto');
       };
     }
 
