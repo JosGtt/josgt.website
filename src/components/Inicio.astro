@@ -7,7 +7,7 @@
   class="relative py-20" 
 >
   <div class="container mx-auto px-4 relative">
-    <!-- Símbolo decorativo (lado izquierdo) — solo visual, no interactúa -->
+    {/* Símbolo decorativo (lado izquierdo) — solo visual, no interactúa */}
     <div class="absolute z-0 pointer-events-none symbol-wrap-left" aria-hidden="true">
 
       <svg class="symbol-svg" viewBox="0 0 300 300" preserveAspectRatio="xMidYMid meet"
@@ -21,8 +21,8 @@
     </div>
 
 
-    <div class="flex flex-col md:flex-row items-center justify-center gap-8">
-      <div class="w-full md:w-1/2 flex flex-col items-center z-10">
+    <div class="flex flex-col items-center justify-center gap-8">
+      <div class="w-full flex flex-col items-center z-10">
         <div class="hidden md:block mb-4">
           <svg
             class="w-40 h-40 md:w-56 md:h-56 fill-none stroke-current text-[var(--toggle-sun)]"
@@ -36,17 +36,18 @@
         </div>
 
         <h1 id="hero-title"
-            class="text-6xl md:text-8xl font-extrabold leading-tight text-center text-glow whitespace-pre-line"
+          class="w-full min-h-[2.3em] text-4xl sm:text-6xl md:text-8xl font-extrabold leading-tight text-center text-glow whitespace-pre-line"
+          aria-label="Full Stack Developer"
             style="font-family: var(--font-display); color: var(--text-light);">
         </h1>
 
         <p class="mt-4 text-lg md:text-xl text-[var(--text-light)] dark:text-gray-400 text-center max-w-md">
-          Desarrollador · Disponibilidad inmediata · React · Astro · Tailwind
+          Arquitecto de Software · React · Astro · Tailwind
         </p>
       </div>
     </div>
 
-    <!-- Símbolo decorativo (lado derecho) — espejo del izquierdo -->
+    {/* Símbolo decorativo (lado derecho) — espejo del izquierdo */}
     <div class="absolute z-0 pointer-events-none symbol-wrap-right" aria-hidden="true">
       <svg class="symbol-svg" viewBox="0 0 300 300" preserveAspectRatio="xMidYMid meet"
            xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
@@ -60,10 +61,15 @@
   </div>
 
 
-  <script type="module" client:load>
+  <script>
     // Efecto de escritura: se activa cuando el título aparece en pantalla
-    const text = "Front End/ Back End\nDeveloper";
-    const titleEl = document.getElementById('hero-title');
+    const text = "Full Stack\nDeveloper";
+    function getRequiredElement(id) {
+      const element = document.getElementById(id);
+      if (!element) throw new Error(`Element not found: ${id}`);
+      return element;
+    }
+    const titleEl = getRequiredElement('hero-title');
 
     function buildTyped(el, txt) {
       el.innerHTML = '';
@@ -90,16 +96,8 @@
       });
     }
 
-    const io = new IntersectionObserver((entries, obs) => {
-      for (const e of entries) {
-        if (e.isIntersecting) {
-          buildTyped(titleEl, text);
-          titleEl.classList.add('typing-started');
-          obs.disconnect();
-        }
-      }
-    }, { threshold: 0.2 });
-    io.observe(titleEl);
+    buildTyped(titleEl, text);
+    titleEl.classList.add('typing-started');
   </script>
 
   <style is:global>
@@ -121,6 +119,17 @@
       right: var(--edge-offset);
       top: var(--symbol-vertical);
       transform: translateY(-50%);
+    }
+
+    @media (max-width: 640px) {
+      :root {
+        --edge-offset: .75rem;
+        --symbol-size: clamp(40px, 12vw, 52px);
+        --symbol-font-size: clamp(60px, 18vw, 78px);
+        --symbol-vertical: 2.25rem;
+      }
+      .symbol-wrap-left,
+      .symbol-wrap-right { opacity: .58; }
     }
 
     /* SVG: permitir que los glifos no se recorten, controlar tamaño y añadir sombra */
@@ -147,7 +156,7 @@
     .symbol-svg { animation: float-subtle 6s ease-in-out infinite; }
 
     /* Estilos para el efecto de "typing" (aparecer carácter por carácter) */
-    #hero-title .line { display:inline-block; white-space:pre; }
+    #hero-title .line { display:block; white-space:pre; }
     #hero-title .hero-char { display:inline-block; opacity: 0; transform: translateY(8px); animation: hero-type 0.12s ease-out forwards; animation-delay: var(--d); font-variant-ligatures: none; }
     #hero-title .hero-cursor { display:inline-block; margin-left:6px; opacity: 0; font-weight: 700; }
     #hero-title.typing-started .hero-cursor { opacity:1; animation: blink 1s steps(2,end) infinite; }

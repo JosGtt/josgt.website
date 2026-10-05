@@ -1,14 +1,12 @@
 ---
 import LinesIcon from "../components/icons/LinesIcon.astro";
-const {} = Astro.props;
 
 const links = [
   { label: 'Inicio',       id: 'inicio'      },
   { label: 'Trabajos',     id: 'trabajos'    },
   { label: 'Habilidades',  id: 'habilidades' },
-  /*{ label: 'Proyectos',    id: 'proyectos'   },*/
   { label: 'Contacto',     id: 'contacto'    },
-  { label: 'Sobre\u00A0Mí', id: 'sobremi'     }  /* espacio no separable */
+  { label: 'Sobre\u00A0Mí', id: 'sobremi'     }
 ];
 ---
 
@@ -20,10 +18,9 @@ const links = [
     bg-transparent transition-all duration-300 text-glow z-40 relative
   "
 >
-  <!-- Desktop links (hidden on small screens) -->
-  <ul class="hidden md:flex items-center gap-2">
+  <ul class="hidden lg:flex items-center gap-2">
     {links.map(({ label, id }, i) => (
-      <li key={i}>
+      <li>
         <a
           href={`#${id}`}
           class="
@@ -38,43 +35,49 @@ const links = [
     ))}
   </ul>
 
-  <!-- Mobile hamburger (visible on small screens) -->
   <button
     id="menu-toggle"
-    class="md:hidden w-12 h-12 rounded-full border-[3px] border-[var(--card-border)] flex items-center justify-center p-2 bg-transparent cursor-pointer transition-all duration-300"
-    aria-label="Toggle menu"
+    class="lg:hidden w-12 h-12 rounded-full border-[3px] border-[var(--card-border)] flex items-center justify-center p-2 bg-transparent cursor-pointer transition-all duration-300"
+    aria-label="Abrir menú"
+    aria-controls="mobile-menu"
     aria-expanded="false"
     type="button"
   >
     <LinesIcon class="w-6 h-6 fill-current text-[var(--card-border)]" />
   </button>
 
-  <!-- Mobile menu (dropdown) — no ocupa todo el ancho y aplica cristal cuando está abierto -->
   <div
     id="mobile-menu"
-    class="hidden md:hidden absolute left-0 top-full mt-2 flex flex-col items-stretch gap-2 py-2 rounded-md border-[1px] border-[var(--card-border)] bg-transparent transition-all duration-200 z-50"
-    style="min-width:160px; max-width:260px; width:auto;"
-    role="menu"
+    class="lg:hidden absolute right-0 top-full mt-2 w-56 flex flex-col items-stretch gap-2 py-2 rounded-md border border-[var(--card-border)] bg-transparent transition-all duration-200 z-50"
+    hidden
+    aria-hidden="true"
   >
-    {links.map(({ label, id }, i) => (
-      <a
-        key={i}
-        href={`#${id}`}
-        class="block text-center px-4 py-2 rounded-md font-semibold transition-colors duration-200 hover:bg-[var(--nav-hover-bg-light)] cursor-pointer"
-        role="menuitem"
-      >
-        {label}
-      </a>
-    ))}
+    <ul class="flex flex-col gap-1">
+      {links.map(({ label, id }, i) => (
+        <li>
+          <a
+            href={`#${id}`}
+            class="block text-center px-4 py-2 rounded-md font-semibold transition-colors duration-200 hover:bg-[var(--nav-hover-bg-light)] cursor-pointer"
+          >
+            {label}
+          </a>
+        </li>
+      ))}
+    </ul>
   </div>
 </nav>
 
-<script is:client>
-  const menu = document.getElementById('site-menu');
-  const toggle = document.getElementById('menu-toggle');
-  const mobileMenu = document.getElementById('mobile-menu');
+  <script>
+  function getRequiredElement(id) {
+    const element = document.getElementById(id);
+    if (!element) throw new Error(`Menu element not found: ${id}`);
+    return element;
+  }
 
-  // 👇 clases EXACTAS del cristal que tenías y que quieres mantener
+  const menu = getRequiredElement('site-menu');
+  const toggle = getRequiredElement('menu-toggle');
+  const mobileMenu = getRequiredElement('mobile-menu');
+
   const glassClasses = [
     'bg-white/10',
     'dark:bg-black/10',
@@ -88,7 +91,7 @@ const links = [
       toggle.classList.add(...glassClasses);
     } else {
       menu.classList.remove(...glassClasses);
-      if (mobileMenu.classList.contains('hidden')) {
+      if (mobileMenu.hidden) {
         toggle.classList.remove(...glassClasses);
       }
     }
@@ -97,45 +100,42 @@ const links = [
   handleScrollGlass();
 
 
-  function positionDropdownUnderButton() {
-    const navRect = menu.getBoundingClientRect();
-    const btnRect = toggle.getBoundingClientRect();
-
-    const left = Math.max(8, btnRect.left - navRect.left);
-    const top = btnRect.bottom - navRect.top + 8;
-
-    mobileMenu.style.left = `${left}px`;
-    mobileMenu.style.top = `${top}px`;
-  }
   function openMobile() {
-    positionDropdownUnderButton();
-    mobileMenu.classList.remove('hidden');
+    mobileMenu.hidden = false;
     mobileMenu.classList.add(...glassClasses);
     toggle.setAttribute('aria-expanded', 'true');
-    // opcional: focus para accesibilidad
-    mobileMenu.querySelector('[role="menuitem"]')?.focus?.();
+    toggle.setAttribute('aria-label', 'Cerrar menú');
+    mobileMenu.setAttribute('aria-hidden', 'false');
+    mobileMenu.querySelector('a')?.focus();
   }
-  function closeMobile() {
-    mobileMenu.classList.add('hidden');
+  function closeMobile(restoreFocus = false) {
+    mobileMenu.hidden = true;
     mobileMenu.classList.remove(...glassClasses);
     toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Abrir menú');
+    mobileMenu.setAttribute('aria-hidden', 'true');
     if (window.scrollY === 0) toggle.classList.remove(...glassClasses);
+    if (restoreFocus) toggle.focus();
   }
 
   toggle.addEventListener('click', (e) => {
     e.stopPropagation();
-    if (mobileMenu.classList.contains('hidden')) openMobile();
-    else closeMobile();
+    if (mobileMenu.hidden) openMobile();
+    else closeMobile(true);
+  });
+  mobileMenu.addEventListener('click', (e) => {
+    if (e.target instanceof Element && e.target.closest('a')) closeMobile();
   });
   document.addEventListener('click', (e) => {
-    if (!menu.contains(e.target)) closeMobile();
+    if (!(e.target instanceof Node) || !menu.contains(e.target)) closeMobile();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+      closeMobile(true);
+    }
   });
 
   window.addEventListener('resize', () => {
     closeMobile();
   });
-  const mo = new MutationObserver(() => {
-    if (!mobileMenu.classList.contains('hidden')) positionDropdownUnderButton();
-  });
-  mo.observe(mobileMenu, { attributes: true, attributeFilter: ['class', 'style'] });
 </script>

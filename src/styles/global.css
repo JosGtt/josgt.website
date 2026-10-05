@@ -55,12 +55,6 @@
   --nav-link-text-light: #7817E8;
   --nav-hover-bg-light: #00ffff5e;
 
-  /* Cursor Halo */
-  --c-x: 0px;
-  --c-y: 0px;
-  --c-size: 120px;
-  --c-color: rgba(140, 90, 255, 0.4);
-
   /* Font */
   --font-display: 'Orbitron', sans-serif;
 
@@ -99,7 +93,6 @@ html.dark {
   --nav-link:       var(--toggle-sun);
   --nav-link-hover: var(--toggle-sun-hover-dark);
   --nav-link-bg-hover: var(--toggle-ball-bg-dark);
-  --c-color:        rgba(180, 120, 255, 0.3);
   --nav-link-text-light: #d1aaff;
   --nav-hover-bg-light: #c3a3e5;
   
@@ -135,24 +128,6 @@ body {
   color: #ab81d87c;
 }
 
-/*─────────────────────────────────────────────────────────────────────────────
-  Cursor Halo (Global)
-─────────────────────────────────────────────────────────────────────────────*/
-html::before {
-  content: '';
-  position:       fixed;
-  left:           var(--c-x);
-  top:            var(--c-y);
-  width:          var(--c-size);
-  height:         var(--c-size);
-  pointer-events: none;
-  border-radius:  50%;
-  background:     radial-gradient(circle closest-side, var(--c-color) 0%, transparent 60%);
-  transform:      translate(-50%, -50%);
-  mix-blend-mode: overlay;
-  transition:     width 0.2s ease, height 0.2s ease;
-  z-index:        9999;
-}
 .text-glow {
   /* sombra difusa del color principal del toggle */
   text-shadow:
@@ -324,4 +299,32 @@ html::before {
 /* Dark mode tweak: ligeramente más sutil el glow */
 html.dark .tech-pill:hover .tech-icon {
   filter: drop-shadow(0 0 6px rgba(255,255,255,0.85));
+}
+
+.skill-card.is-entering .tech-icon {
+  animation: skill-color-entry 780ms cubic-bezier(.2,.7,.2,1) var(--entry-delay, 0ms) both;
+}
+
+@keyframes skill-color-entry {
+  0% {
+    color: var(--entry-color);
+    filter: drop-shadow(0 0 0 var(--entry-color));
+    transform: translateY(-8px) scale(.92);
+  }
+  42% {
+    color: var(--entry-color);
+    filter: drop-shadow(0 0 13px var(--entry-color)) drop-shadow(0 0 4px rgba(255,255,255,.8));
+    transform: translateY(0) scale(1.07);
+  }
+  100% {
+    color: var(--icon-color);
+    filter: none;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skill-card.is-entering .tech-icon {
+    animation: none;
+  }
 }

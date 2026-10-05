@@ -21,7 +21,7 @@ import CV from '../components/icons/CV.astro';
   <div class="flex justify-center mt-32">
     <div class="flex items-center gap-6">
 
-      <!-- WhatsApp: botón que muestra popover con QR encima -->
+      {/* WhatsApp: botón que muestra popover con QR encima */}
       <div class="relative">
         <button
           id="wspBtn"
@@ -34,7 +34,7 @@ import CV from '../components/icons/CV.astro';
           </span>
         </button>
 
-          <!-- popover QR (inicialmente oculto) -->
+          {/* popover QR (inicialmente oculto) */}
           <div id="wspPopover" class="hidden absolute -top-64 left-1/2 transform -translate-x-1/2 w-44  rounded-xl shadow-lg z-50 p-3 text-center">
             <button id="wspClose" class="absolute right-2 top-2 text-sm opacity-80 hover:opacity-100" aria-label="Cerrar">✕</button>
             <img id="wspImg" src="/assets/jose.png" alt="QR WhatsApp" class="mx-auto w-55 h-55 object-cover rounded-md" />
@@ -43,7 +43,7 @@ import CV from '../components/icons/CV.astro';
           </div>
         </div>
 
-      <!-- Gmail: copia email -->
+      {/* Gmail: copia email */}
       <div class="relative">
         <button
           id="gmailBtn"
@@ -57,7 +57,7 @@ import CV from '../components/icons/CV.astro';
         </button>
       </div>
 
-      <!-- LinkedIn: enlace -->
+      {/* LinkedIn: enlace */}
       <a
         id="lnLink"
         class="tech-pill tech-linkedin inline-flex items-center justify-center rounded-full border-0 bg-transparent p-1"
@@ -71,7 +71,7 @@ import CV from '../components/icons/CV.astro';
         </span>
       </a>
 
-      <!-- CV: descarga -->
+      {/* CV: descarga */}
       <a
         id="cvLink"
         class="tech-pill tech-cv inline-flex items-center justify-center rounded-full border-0 bg-transparent p-1"
@@ -86,7 +86,7 @@ import CV from '../components/icons/CV.astro';
     </div>
   </div>
 
-  <!-- Toast "Copiado" -->
+  {/* Toast "Copiado" */}
   <div id="copyToast" class="pointer-events-none fixed bottom-12 left-1/2 transform -translate-x-1/2 bg-[var(--toggle-sun)] text-white px-4 py-2 rounded-full opacity-0 transition-opacity duration-300 z-50">
     Copiado
   </div>
